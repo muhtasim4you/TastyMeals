@@ -23,19 +23,35 @@
   font-size: 1.4rem;
 }
 
-.navbar-links {
+.navbar-center {
   display: flex;
   align-items: center;
   gap: 25px;
 }
 
-.navbar-links a {
+.navbar-center a {
   font-weight: 500;
   color: #555;
   transition: color 0.3s;
 }
 
-.navbar-links a:hover {
+.navbar-center a:hover {
+  color: #e74c3c;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.navbar-right a {
+  font-weight: 500;
+  color: #555;
+  transition: color 0.3s;
+}
+
+.navbar-right a:hover {
   color: #e74c3c;
 }
 

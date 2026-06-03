@@ -19,12 +19,18 @@ const Navbar = () => {
         <FaUtensils className="brand-icon" />
         <span>TastyMeals</span>
       </Link>
-      <ul className="navbar-links">
+      <ul className="navbar-center">
         <li><Link to="/">Home</Link></li>
-        {user ? (
+        {user && (
           <>
             <li><Link to="/wishlist">Wishlist</Link></li>
             <li><Link to="/profile">Profile</Link></li>
+          </>
+        )}
+      </ul>
+      <ul className="navbar-right">
+        {user ? (
+          <>
             <li className="navbar-user">Hi, {user.name}</li>
             <li>
               <button className="btn-logout" onClick={handleLogout}>Logout</button>
