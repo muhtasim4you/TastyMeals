@@ -23,6 +23,43 @@
   font-size: 1.4rem;
 }
 
+.navbar-search {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 25px;
+  padding: 8px 16px;
+  gap: 8px;
+  width: 280px;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+
+.navbar-search:focus-within {
+  background: #fff;
+  border-color: #e74c3c;
+  box-shadow: 0 2px 10px rgba(231, 76, 60, 0.1);
+}
+
+.search-icon {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.navbar-search input {
+  border: none;
+  background: none;
+  outline: none;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  color: #333;
+  width: 100%;
+}
+
+.navbar-search input::placeholder {
+  color: #aaa;
+}
+
 .navbar-center {
   display: flex;
   align-items: center;
