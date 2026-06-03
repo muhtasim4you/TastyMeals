@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p server/models server/routes server/middleware server/config)",
+      "Bash(mkdir -p client/src/components client/src/pages client/src/context client/public)",
+      "Bash(npm install:*)",
+      "Bash(mv client:*)",
+      "Bash(mv server:*)",
+      "Bash(cp -r client frontend)",
+      "Bash(cp -r server backend)",
+      "Bash(rm -rf client server)"
+    ]
+  }
+}
