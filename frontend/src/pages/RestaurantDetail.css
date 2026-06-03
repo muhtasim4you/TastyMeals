@@ -184,8 +184,22 @@
 .menu-item-desc {
   color: #888;
   font-size: 0.82rem;
-  flex: 1;
+  margin-bottom: 6px;
+}
+
+.menu-item-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   margin-bottom: 8px;
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.menu-star {
+  color: #f39c12;
+  font-size: 0.8rem;
 }
 
 .menu-item-bottom {

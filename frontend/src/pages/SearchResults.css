@@ -197,10 +197,29 @@
   margin-bottom: 4px;
 }
 
+.search-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 .search-item-price {
   color: #e74c3c;
   font-weight: 600;
   font-size: 1rem;
+}
+
+.search-item-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #555;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.search-item-rating .star-icon {
+  color: #f39c12;
 }
 
 .item-fav-btn {

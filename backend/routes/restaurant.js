@@ -44,6 +44,7 @@ router.get("/search", async (req, res) => {
             price: item.price,
             image: item.image,
             category: item.category,
+            rating: item.rating,
             restaurant: restaurant.name,
             restaurantId: restaurant._id,
           });

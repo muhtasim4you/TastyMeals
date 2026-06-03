@@ -1,72 +1,46 @@
-import { useContext } from "react";
+import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 import { FaStar, FaMapMarkerAlt, FaHeart, FaRegHeart } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import { WishlistContext } from "../context/WishlistContext";
 import toast from "react-hot-toast";
 import "./TopRestaurants.css";
 
-const restaurants = [
-  {
-    id: "1",
-    name: "The Spice Garden",
-    cuisine: "Indian",
-    rating: 4.8,
-    location: "Downtown",
-    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop",
-  },
-  {
-    id: "2",
-    name: "Sushi Master",
-    cuisine: "Japanese",
-    rating: 4.7,
-    location: "Midtown",
-    image: "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?w=400&h=300&fit=crop",
-  },
-  {
-    id: "3",
-    name: "Bella Italia",
-    cuisine: "Italian",
-    rating: 4.9,
-    location: "Westside",
-    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop",
-  },
-  {
-    id: "4",
-    name: "Burger Bliss",
-    cuisine: "American",
-    rating: 4.6,
-    location: "East End",
-    image: "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=400&h=300&fit=crop",
-  },
-  {
-    id: "5",
-    name: "Dragon Wok",
-    cuisine: "Chinese",
-    rating: 4.5,
-    location: "Chinatown",
-    image: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=400&h=300&fit=crop",
-  },
-  {
-    id: "6",
-    name: "Taco Fiesta",
-    cuisine: "Mexican",
-    rating: 4.7,
-    location: "Southside",
-    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop",
-  },
-];
-
 const TopRestaurants = () => {
+  const [restaurants, setRestaurants] = useState([]);
   const { user } = useContext(AuthContext);
   const { toggleRestaurant, isRestaurantFav } = useContext(WishlistContext);
 
-  const handleFav = (restaurant) => {
+  useEffect(() => {
+    fetchRestaurants();
+  }, []);
+
+  const fetchRestaurants = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/restaurants");
+      setRestaurants(res.data);
+    } catch (error) {
+      console.error("Failed to fetch restaurants");
+    }
+  };
+
+  const handleFav = (e, restaurant) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!user) {
       toast.error("Please login to add favorites");
       return;
     }
-    const isFav = isRestaurantFav(restaurant.id);
-    toggleRestaurant({ restaurantId: restaurant.id, ...restaurant });
+    const isFav = isRestaurantFav(restaurant._id);
+    toggleRestaurant({
+      restaurantId: restaurant._id,
+      name: restaurant.name,
+      cuisine: restaurant.cuisine,
+      rating: restaurant.rating,
+      location: restaurant.location,
+      image: restaurant.image,
+    });
     toast.success(isFav ? "Removed from wishlist" : "Added to wishlist");
   };
 
@@ -76,19 +50,24 @@ const TopRestaurants = () => {
       <p className="section-subtitle">Recommended for you</p>
       <div className="restaurant-grid">
         {restaurants.map((restaurant) => (
-          <div key={restaurant.id} className="restaurant-card">
+          <Link
+            to={`/restaurant/${restaurant._id}`}
+            key={restaurant._id}
+            className="restaurant-card"
+          >
             <div className="card-image">
               <img src={restaurant.image} alt={restaurant.name} />
               <span className="cuisine-badge">{restaurant.cuisine}</span>
               <button
-                className={`fav-btn ${isRestaurantFav(restaurant.id) ? "fav-active" : ""}`}
-                onClick={() => handleFav(restaurant)}
+                className={`fav-btn ${isRestaurantFav(restaurant._id) ? "fav-active" : ""}`}
+                onClick={(e) => handleFav(e, restaurant)}
               >
-                {isRestaurantFav(restaurant.id) ? <FaHeart /> : <FaRegHeart />}
+                {isRestaurantFav(restaurant._id) ? <FaHeart /> : <FaRegHeart />}
               </button>
             </div>
             <div className="card-info">
               <h3>{restaurant.name}</h3>
+              <p className="card-description">{restaurant.description}</p>
               <div className="card-details">
                 <span className="rating">
                   <FaStar className="star-icon" /> {restaurant.rating}
@@ -98,7 +77,7 @@ const TopRestaurants = () => {
                 </span>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

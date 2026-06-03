@@ -162,7 +162,14 @@ const SearchResults = () => {
                         <p className="search-item-restaurant">
                           <FaUtensils /> {item.restaurant}
                         </p>
-                        <p className="search-item-price">${item.price.toFixed(2)}</p>
+                        <div className="search-item-meta">
+                          <span className="search-item-price">${item.price.toFixed(2)}</span>
+                          {item.rating > 0 && (
+                            <span className="search-item-rating">
+                              <FaStar className="star-icon" /> {item.rating}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <button
                         className={`item-fav-btn ${isItemFav(item.name, item.restaurant) ? "fav-active" : ""}`}

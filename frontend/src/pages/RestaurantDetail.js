@@ -129,6 +129,10 @@ const RestaurantDetail = () => {
               <div className="menu-item-info">
                 <h4>{item.name}</h4>
                 <p className="menu-item-desc">{item.description}</p>
+                <div className="menu-item-rating">
+                  <FaStar className="menu-star" />
+                  <span>{item.rating}</span>
+                </div>
                 <div className="menu-item-bottom">
                   <span className="menu-item-price">${item.price.toFixed(2)}</span>
                   <button

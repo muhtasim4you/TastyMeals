@@ -6,6 +6,7 @@ const menuItemSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   image: { type: String, default: "" },
   category: { type: String, default: "Main" },
+  rating: { type: Number, default: 0 },
 });
 
 const restaurantSchema = new mongoose.Schema(
