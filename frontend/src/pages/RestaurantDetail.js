@@ -1,19 +1,38 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { FaStar, FaMapMarkerAlt, FaHeart, FaRegHeart } from "react-icons/fa";
+import { FaStar, FaMapMarkerAlt, FaHeart, FaRegHeart, FaShoppingCart, FaTimes, FaPlus, FaMinus } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import { WishlistContext } from "../context/WishlistContext";
+import { CartContext } from "../context/CartContext";
 import toast from "react-hot-toast";
 import "./RestaurantDetail.css";
+
+const extraOptions = [
+  "Extra Cheese",
+  "Extra Sauce",
+  "No Onions",
+  "No Spice",
+  "Extra Spicy",
+  "Gluten Free",
+  "Add Avocado",
+  "Double Portion",
+];
 
 const RestaurantDetail = () => {
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [specialInstructions, setSpecialInstructions] = useState("");
+  const [selectedExtras, setSelectedExtras] = useState([]);
+
   const { user } = useContext(AuthContext);
   const { toggleRestaurant, isRestaurantFav, toggleItem, isItemFav } = useContext(WishlistContext);
+  const { addToCart } = useContext(CartContext);
 
   const API = "http://localhost:5000/api/restaurants";
 
@@ -62,6 +81,44 @@ const RestaurantDetail = () => {
       image: item.image,
     });
     toast.success(isFav ? "Removed from wishlist" : "Added to wishlist");
+  };
+
+  const openCustomizeModal = (item) => {
+    if (!user) {
+      toast.error("Please login to add items to cart");
+      return;
+    }
+    setSelectedItem(item);
+    setQuantity(1);
+    setSpecialInstructions("");
+    setSelectedExtras([]);
+    setShowModal(true);
+  };
+
+  const toggleExtra = (extra) => {
+    setSelectedExtras((prev) =>
+      prev.includes(extra) ? prev.filter((e) => e !== extra) : [...prev, extra]
+    );
+  };
+
+  const handleAddToCart = async () => {
+    const success = await addToCart({
+      itemId: selectedItem._id,
+      name: selectedItem.name,
+      price: selectedItem.price,
+      quantity,
+      image: selectedItem.image,
+      restaurant: restaurant.name,
+      restaurantId: restaurant._id,
+      specialInstructions,
+      extras: selectedExtras,
+    });
+    if (success) {
+      toast.success(`${selectedItem.name} added to cart!`);
+      setShowModal(false);
+    } else {
+      toast.error("Failed to add to cart");
+    }
   };
 
   if (loading) {
@@ -135,18 +192,94 @@ const RestaurantDetail = () => {
                 </div>
                 <div className="menu-item-bottom">
                   <span className="menu-item-price">${item.price.toFixed(2)}</span>
-                  <button
-                    className={`menu-fav-btn ${isItemFav(item.name, restaurant.name) ? "fav-active" : ""}`}
-                    onClick={() => handleFavItem(item)}
-                  >
-                    {isItemFav(item.name, restaurant.name) ? <FaHeart /> : <FaRegHeart />}
-                  </button>
+                  <div className="menu-item-actions">
+                    <button
+                      className={`menu-fav-btn ${isItemFav(item.name, restaurant.name) ? "fav-active" : ""}`}
+                      onClick={() => handleFavItem(item)}
+                    >
+                      {isItemFav(item.name, restaurant.name) ? <FaHeart /> : <FaRegHeart />}
+                    </button>
+                    <button
+                      className="add-cart-btn"
+                      onClick={() => openCustomizeModal(item)}
+                    >
+                      <FaShoppingCart /> Add
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      {showModal && selectedItem && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="customize-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setShowModal(false)}>
+              <FaTimes />
+            </button>
+
+            <div className="modal-header">
+              {selectedItem.image && (
+                <img src={selectedItem.image} alt={selectedItem.name} className="modal-image" />
+              )}
+              <div>
+                <h3>{selectedItem.name}</h3>
+                <p className="modal-desc">{selectedItem.description}</p>
+                <p className="modal-price">${selectedItem.price.toFixed(2)}</p>
+              </div>
+            </div>
+
+            <div className="modal-section">
+              <h4>Quantity</h4>
+              <div className="quantity-control">
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>
+                  <FaMinus />
+                </button>
+                <span>{quantity}</span>
+                <button onClick={() => setQuantity(quantity + 1)}>
+                  <FaPlus />
+                </button>
+              </div>
+            </div>
+
+            <div className="modal-section">
+              <h4>Customize Your Order</h4>
+              <div className="extras-grid">
+                {extraOptions.map((extra) => (
+                  <button
+                    key={extra}
+                    className={`extra-chip ${selectedExtras.includes(extra) ? "selected" : ""}`}
+                    onClick={() => toggleExtra(extra)}
+                  >
+                    {extra}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="modal-section">
+              <h4>Special Instructions</h4>
+              <textarea
+                value={specialInstructions}
+                onChange={(e) => setSpecialInstructions(e.target.value)}
+                placeholder="Any special requests? (e.g., allergies, cooking preferences)"
+                rows={3}
+              />
+            </div>
+
+            <div className="modal-footer">
+              <div className="modal-total">
+                Total: <span>${(selectedItem.price * quantity).toFixed(2)}</span>
+              </div>
+              <button className="modal-add-btn" onClick={handleAddToCart}>
+                <FaShoppingCart /> Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

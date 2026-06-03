@@ -109,6 +109,33 @@
   background-color: #c0392b;
 }
 
+.cart-link {
+  position: relative;
+  font-size: 1.2rem;
+  color: #555;
+  transition: color 0.3s;
+}
+
+.cart-link:hover {
+  color: #e74c3c;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .btn-logout {
   background: none;
   border: 2px solid #e74c3c;

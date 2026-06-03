@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import Wishlist from "./pages/Wishlist";
 import SearchResults from "./pages/SearchResults";
 import RestaurantDetail from "./pages/RestaurantDetail";
+import Cart from "./pages/Cart";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/restaurant/:id" element={<RestaurantDetail />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
       <Footer />
     </div>

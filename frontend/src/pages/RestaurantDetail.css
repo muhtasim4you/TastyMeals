@@ -206,6 +206,33 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: auto;
+}
+
+.menu-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-cart-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.add-cart-btn:hover {
+  background-color: #c0392b;
 }
 
 .menu-item-price {
@@ -228,6 +255,210 @@
   color: #e74c3c;
 }
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.customize-modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 30px;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.modal-close:hover {
+  color: #333;
+}
+
+.modal-header {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.modal-header h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.modal-desc {
+  color: #888;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+.modal-price {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.modal-section {
+  margin-bottom: 22px;
+}
+
+.modal-section h4 {
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.quantity-control button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #e74c3c;
+  background: #fff;
+  color: #e74c3c;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  transition: all 0.3s;
+}
+
+.quantity-control button:hover {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.quantity-control span {
+  font-size: 1.2rem;
+  font-weight: 600;
+  min-width: 30px;
+  text-align: center;
+}
+
+.extras-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.extra-chip {
+  padding: 7px 14px;
+  border: 2px solid #eee;
+  border-radius: 20px;
+  background: #fff;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.3s;
+}
+
+.extra-chip:hover {
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+.extra-chip.selected {
+  background: #e74c3c;
+  color: #fff;
+  border-color: #e74c3c;
+}
+
+.modal-section textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.modal-section textarea:focus {
+  border-color: #e74c3c;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.modal-total {
+  font-size: 1rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.modal-total span {
+  color: #e74c3c;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.modal-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 25px;
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.modal-add-btn:hover {
+  background-color: #c0392b;
+}
+
 @media (max-width: 768px) {
   .menu-grid {
     grid-template-columns: 1fr;
@@ -239,5 +470,16 @@
 
   .detail-banner-content h1 {
     font-size: 1.6rem;
+  }
+
+  .customize-modal {
+    max-height: 90vh;
+    padding: 20px;
+  }
+
+  .modal-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 }

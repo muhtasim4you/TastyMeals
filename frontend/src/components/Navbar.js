@@ -1,11 +1,13 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { FaUtensils, FaSearch } from "react-icons/fa";
+import { CartContext } from "../context/CartContext";
+import { FaUtensils, FaSearch, FaShoppingCart } from "react-icons/fa";
 import "./Navbar.css";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
+  const { cartCount } = useContext(CartContext);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -51,6 +53,12 @@ const Navbar = () => {
       <ul className="navbar-right">
         {user ? (
           <>
+            <li>
+              <Link to="/cart" className="cart-link">
+                <FaShoppingCart />
+                {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+              </Link>
+            </li>
             <li className="navbar-user">Hi, {user.name}</li>
             <li>
               <button className="btn-logout" onClick={handleLogout}>Logout</button>
