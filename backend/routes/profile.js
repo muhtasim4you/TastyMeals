@@ -18,13 +18,14 @@ router.get("/", auth, async (req, res) => {
 
 router.put("/", auth, async (req, res) => {
   try {
-    const { name, phone, address, payment } = req.body;
+    const { name, phone, address, payment, dietary } = req.body;
 
     const updateFields = {};
     if (name) updateFields.name = name;
     if (phone !== undefined) updateFields.phone = phone;
     if (address) updateFields.address = address;
     if (payment) updateFields.payment = payment;
+    if (dietary) updateFields.dietary = dietary;
 
     const user = await User.findByIdAndUpdate(
       req.user.id,

@@ -1,9 +1,13 @@
-import { FaStar, FaMapMarkerAlt } from "react-icons/fa";
+import { useContext } from "react";
+import { FaStar, FaMapMarkerAlt, FaHeart, FaRegHeart } from "react-icons/fa";
+import { AuthContext } from "../context/AuthContext";
+import { WishlistContext } from "../context/WishlistContext";
+import toast from "react-hot-toast";
 import "./TopRestaurants.css";
 
 const restaurants = [
   {
-    id: 1,
+    id: "1",
     name: "The Spice Garden",
     cuisine: "Indian",
     rating: 4.8,
@@ -11,7 +15,7 @@ const restaurants = [
     image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop",
   },
   {
-    id: 2,
+    id: "2",
     name: "Sushi Master",
     cuisine: "Japanese",
     rating: 4.7,
@@ -19,7 +23,7 @@ const restaurants = [
     image: "https://images.unsplash.com/photo-1579027989536-b7b1f875659b?w=400&h=300&fit=crop",
   },
   {
-    id: 3,
+    id: "3",
     name: "Bella Italia",
     cuisine: "Italian",
     rating: 4.9,
@@ -27,7 +31,7 @@ const restaurants = [
     image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop",
   },
   {
-    id: 4,
+    id: "4",
     name: "Burger Bliss",
     cuisine: "American",
     rating: 4.6,
@@ -35,7 +39,7 @@ const restaurants = [
     image: "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=400&h=300&fit=crop",
   },
   {
-    id: 5,
+    id: "5",
     name: "Dragon Wok",
     cuisine: "Chinese",
     rating: 4.5,
@@ -43,7 +47,7 @@ const restaurants = [
     image: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=400&h=300&fit=crop",
   },
   {
-    id: 6,
+    id: "6",
     name: "Taco Fiesta",
     cuisine: "Mexican",
     rating: 4.7,
@@ -53,6 +57,19 @@ const restaurants = [
 ];
 
 const TopRestaurants = () => {
+  const { user } = useContext(AuthContext);
+  const { toggleRestaurant, isRestaurantFav } = useContext(WishlistContext);
+
+  const handleFav = (restaurant) => {
+    if (!user) {
+      toast.error("Please login to add favorites");
+      return;
+    }
+    const isFav = isRestaurantFav(restaurant.id);
+    toggleRestaurant({ restaurantId: restaurant.id, ...restaurant });
+    toast.success(isFav ? "Removed from wishlist" : "Added to wishlist");
+  };
+
   return (
     <section className="top-restaurants">
       <h2 className="section-title">Top Restaurants</h2>
@@ -63,6 +80,12 @@ const TopRestaurants = () => {
             <div className="card-image">
               <img src={restaurant.image} alt={restaurant.name} />
               <span className="cuisine-badge">{restaurant.cuisine}</span>
+              <button
+                className={`fav-btn ${isRestaurantFav(restaurant.id) ? "fav-active" : ""}`}
+                onClick={() => handleFav(restaurant)}
+              >
+                {isRestaurantFav(restaurant.id) ? <FaHeart /> : <FaRegHeart />}
+              </button>
             </div>
             <div className="card-info">
               <h3>{restaurant.name}</h3>

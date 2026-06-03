@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { FaUser, FaPhone, FaMapMarkerAlt, FaCreditCard } from "react-icons/fa";
+import { FaUser, FaPhone, FaMapMarkerAlt, FaCreditCard, FaLeaf, FaTimes } from "react-icons/fa";
 import "./Profile.css";
 
 const Profile = () => {
@@ -17,9 +17,38 @@ const Profile = () => {
     phone: "",
     address: { street: "", city: "", state: "", zip: "" },
     payment: { cardName: "", cardNumber: "", expiry: "", cvv: "" },
+    dietary: { preference: "none", allergies: [] },
   });
 
+  const [allergyInput, setAllergyInput] = useState("");
+
   const API = "http://localhost:5000/api/profile";
+
+  const dietaryOptions = [
+    "none",
+    "vegetarian",
+    "vegan",
+    "pescatarian",
+    "keto",
+    "halal",
+    "kosher",
+    "gluten-free",
+  ];
+
+  const commonAllergens = [
+    "Peanuts",
+    "Tree Nuts",
+    "Milk",
+    "Eggs",
+    "Wheat",
+    "Soy",
+    "Fish",
+    "Beef",
+    "Sesame",
+    "Gluten",
+    "Lactose",
+    "Corn",
+  ];
 
   useEffect(() => {
     if (!user) {
@@ -40,6 +69,7 @@ const Profile = () => {
         phone: res.data.phone || "",
         address: res.data.address || { street: "", city: "", state: "", zip: "" },
         payment: res.data.payment || { cardName: "", cardNumber: "", expiry: "", cvv: "" },
+        dietary: res.data.dietary || { preference: "none", allergies: [] },
       });
     } catch (error) {
       toast.error("Failed to load profile");
@@ -58,6 +88,7 @@ const Profile = () => {
         phone: res.data.phone || "",
         address: res.data.address || { street: "", city: "", state: "", zip: "" },
         payment: res.data.payment || { cardName: "", cardNumber: "", expiry: "", cvv: "" },
+        dietary: res.data.dietary || { preference: "none", allergies: [] },
       });
       toast.success("Profile updated successfully!");
     } catch (error) {
@@ -73,6 +104,25 @@ const Profile = () => {
 
   const updatePayment = (field, value) => {
     setProfile({ ...profile, payment: { ...profile.payment, [field]: value } });
+  };
+
+  const toggleAllergy = (allergy) => {
+    const current = profile.dietary.allergies;
+    const updated = current.includes(allergy)
+      ? current.filter((a) => a !== allergy)
+      : [...current, allergy];
+    setProfile({ ...profile, dietary: { ...profile.dietary, allergies: updated } });
+  };
+
+  const addCustomAllergy = () => {
+    const trimmed = allergyInput.trim();
+    if (trimmed && !profile.dietary.allergies.includes(trimmed)) {
+      setProfile({
+        ...profile,
+        dietary: { ...profile.dietary, allergies: [...profile.dietary.allergies, trimmed] },
+      });
+    }
+    setAllergyInput("");
   };
 
   return (
@@ -102,6 +152,12 @@ const Profile = () => {
               onClick={() => setActiveTab("payment")}
             >
               <FaCreditCard /> Payment Info
+            </li>
+            <li
+              className={activeTab === "dietary" ? "active" : ""}
+              onClick={() => setActiveTab("dietary")}
+            >
+              <FaLeaf /> Dietary Preferences
             </li>
           </ul>
         </div>
@@ -224,6 +280,80 @@ const Profile = () => {
                   />
                 </div>
               </div>
+            </div>
+          )}
+
+          {activeTab === "dietary" && (
+            <div className="profile-section">
+              <h2>Dietary Preferences</h2>
+              <div className="form-group">
+                <label>Diet Type</label>
+                <select
+                  className="diet-select"
+                  value={profile.dietary.preference}
+                  onChange={(e) =>
+                    setProfile({
+                      ...profile,
+                      dietary: { ...profile.dietary, preference: e.target.value },
+                    })
+                  }
+                >
+                  {dietaryOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Food Allergies</label>
+                <p className="allergy-hint">Select common allergens or add your own</p>
+                <div className="allergen-grid">
+                  {commonAllergens.map((allergen) => (
+                    <button
+                      key={allergen}
+                      type="button"
+                      className={`allergen-chip ${
+                        profile.dietary.allergies.includes(allergen) ? "selected" : ""
+                      }`}
+                      onClick={() => toggleAllergy(allergen)}
+                    >
+                      {allergen}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Add Custom Allergy</label>
+                <div className="custom-allergy-row">
+                  <input
+                    type="text"
+                    value={allergyInput}
+                    onChange={(e) => setAllergyInput(e.target.value)}
+                    placeholder="Type an allergy and press Add"
+                    onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCustomAllergy())}
+                  />
+                  <button type="button" className="add-allergy-btn" onClick={addCustomAllergy}>
+                    Add
+                  </button>
+                </div>
+              </div>
+
+              {profile.dietary.allergies.length > 0 && (
+                <div className="selected-allergies">
+                  <label>Your Allergies:</label>
+                  <div className="allergy-tags">
+                    {profile.dietary.allergies.map((allergy) => (
+                      <span key={allergy} className="allergy-tag">
+                        {allergy}
+                        <FaTimes className="remove-icon" onClick={() => toggleAllergy(allergy)} />
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

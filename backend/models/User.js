@@ -36,6 +36,10 @@ const userSchema = new mongoose.Schema(
       expiry: { type: String, default: "" },
       cvv: { type: String, default: "" },
     },
+    dietary: {
+      preference: { type: String, default: "none" },
+      allergies: [{ type: String }],
+    },
   },
   { timestamps: true }
 );

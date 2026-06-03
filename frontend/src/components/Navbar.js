@@ -23,6 +23,7 @@ const Navbar = () => {
         <li><Link to="/">Home</Link></li>
         {user ? (
           <>
+            <li><Link to="/wishlist">Wishlist</Link></li>
             <li><Link to="/profile">Profile</Link></li>
             <li className="navbar-user">Hi, {user.name}</li>
             <li>
