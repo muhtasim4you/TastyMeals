@@ -110,7 +110,7 @@ const Wishlist = () => {
                     <div className="item-info">
                       <h4>{item.name}</h4>
                       <p className="item-restaurant">{item.restaurant}</p>
-                      <p className="item-price">${item.price.toFixed(2)}</p>
+                      <p className="item-price">৳{item.price.toFixed(2)}</p>
                     </div>
                     <button
                       className="remove-btn"

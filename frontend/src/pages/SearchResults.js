@@ -163,7 +163,7 @@ const SearchResults = () => {
                           <FaUtensils /> {item.restaurant}
                         </p>
                         <div className="search-item-meta">
-                          <span className="search-item-price">${item.price.toFixed(2)}</span>
+                          <span className="search-item-price">৳{item.price.toFixed(2)}</span>
                           {item.rating > 0 && (
                             <span className="search-item-rating">
                               <FaStar className="star-icon" /> {item.rating}

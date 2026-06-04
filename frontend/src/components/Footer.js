@@ -12,11 +12,11 @@ const Footer = () => {
         <div className="footer-about">
           <h4>About TastyMeals</h4>
           <p>
-            TastyMeals is your go-to food delivery and profit management platform.
-            We connect hungry customers with the best local restaurants, ensuring
-            fresh, delicious meals delivered right to your doorstep. Our platform
-            also helps restaurant owners manage their profits and track business
-            performance effortlessly.
+            TastyMeals is Bangladesh's favourite food delivery and profit management platform.
+            We connect hungry customers with the best local restaurants across Dhaka
+            and beyond, ensuring fresh, delicious meals delivered right to your doorstep.
+            Our platform also helps restaurant owners manage their profits and track
+            business performance effortlessly. Pay easily with Bkash, Nagad, or Bank Transfer.
           </p>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-import { FaHistory, FaChevronDown, FaChevronUp, FaBoxOpen, FaMobileAlt, FaUniversity } from "react-icons/fa";
+import { FaHistory, FaChevronDown, FaChevronUp, FaBoxOpen, FaMobileAlt, FaUniversity, FaMapMarkerAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
 import "./OrderHistory.css";
 
@@ -120,7 +120,18 @@ const OrderHistory = () => {
                   </div>
                 </div>
                 <div className="order-card-right">
-                  <span className="order-total">${order.total.toFixed(2)}</span>
+                  {order.status !== "delivered" && order.status !== "cancelled" && (
+                    <button
+                      className="track-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/orders/${order._id}/track`);
+                      }}
+                    >
+                      <FaMapMarkerAlt /> Track
+                    </button>
+                  )}
+                  <span className="order-total">৳{order.total.toFixed(2)}</span>
                   <span className="order-items-count">
                     {order.items.length} item{order.items.length !== 1 ? "s" : ""}
                   </span>
@@ -155,7 +166,7 @@ const OrderHistory = () => {
                           <div className="order-item-qty">
                             <span>x{item.quantity}</span>
                             <span className="order-item-price">
-                              ${(item.price * item.quantity).toFixed(2)}
+                              ৳{(item.price * item.quantity).toFixed(2)}
                             </span>
                           </div>
                         </div>
@@ -188,20 +199,20 @@ const OrderHistory = () => {
                   <div className="order-detail-section order-pricing">
                     <div className="pricing-row">
                       <span>Subtotal</span>
-                      <span>${order.subtotal.toFixed(2)}</span>
+                      <span>৳{order.subtotal.toFixed(2)}</span>
                     </div>
                     <div className="pricing-row">
                       <span>Delivery Fee</span>
-                      <span>${order.deliveryFee.toFixed(2)}</span>
+                      <span>৳{order.deliveryFee.toFixed(2)}</span>
                     </div>
                     <div className="pricing-row">
-                      <span>Tax</span>
-                      <span>${order.tax.toFixed(2)}</span>
+                      <span>VAT</span>
+                      <span>৳{order.tax.toFixed(2)}</span>
                     </div>
                     <div className="pricing-divider"></div>
                     <div className="pricing-row pricing-total">
                       <span>Total</span>
-                      <span>${order.total.toFixed(2)}</span>
+                      <span>৳{order.total.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>

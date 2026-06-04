@@ -1,6 +1,8 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const Restaurant = require("./models/Restaurant");
+const User = require("./models/User");
 
 const restaurants = [
   {
@@ -105,6 +107,21 @@ const seedDB = async () => {
 
     await Restaurant.insertMany(restaurants);
     console.log("Seeded 6 restaurants with menu items");
+
+    const existingAdmin = await User.findOne({ email: "admin@tastymeals.com" });
+    if (!existingAdmin) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash("admin123", salt);
+      await User.create({
+        name: "Admin",
+        email: "admin@tastymeals.com",
+        password: hashedPassword,
+        role: "admin",
+      });
+      console.log("Admin user created (admin@tastymeals.com / admin123)");
+    } else {
+      console.log("Admin user already exists");
+    }
 
     process.exit(0);
   } catch (error) {

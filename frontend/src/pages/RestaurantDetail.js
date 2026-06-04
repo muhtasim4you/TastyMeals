@@ -191,7 +191,7 @@ const RestaurantDetail = () => {
                   <span>{item.rating}</span>
                 </div>
                 <div className="menu-item-bottom">
-                  <span className="menu-item-price">${item.price.toFixed(2)}</span>
+                  <span className="menu-item-price">৳{item.price.toFixed(2)}</span>
                   <div className="menu-item-actions">
                     <button
                       className={`menu-fav-btn ${isItemFav(item.name, restaurant.name) ? "fav-active" : ""}`}
@@ -227,7 +227,7 @@ const RestaurantDetail = () => {
               <div>
                 <h3>{selectedItem.name}</h3>
                 <p className="modal-desc">{selectedItem.description}</p>
-                <p className="modal-price">${selectedItem.price.toFixed(2)}</p>
+                <p className="modal-price">৳{selectedItem.price.toFixed(2)}</p>
               </div>
             </div>
 
@@ -271,7 +271,7 @@ const RestaurantDetail = () => {
 
             <div className="modal-footer">
               <div className="modal-total">
-                Total: <span>${(selectedItem.price * quantity).toFixed(2)}</span>
+                Total: <span>৳{(selectedItem.price * quantity).toFixed(2)}</span>
               </div>
               <button className="modal-add-btn" onClick={handleAddToCart}>
                 <FaShoppingCart /> Add to Cart

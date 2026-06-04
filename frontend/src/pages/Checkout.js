@@ -33,9 +33,10 @@ const Checkout = () => {
   });
 
   const [note, setNote] = useState("");
+  const [deliveryFee, setDeliveryFee] = useState(30);
+  const [vatRate, setVatRate] = useState(5);
 
-  const deliveryFee = 2.99;
-  const tax = cartTotal * 0.08;
+  const tax = cartTotal * (vatRate / 100);
   const total = cartTotal + deliveryFee + tax;
 
   useEffect(() => {
@@ -67,8 +68,21 @@ const Checkout = () => {
     }
   };
 
+  const fetchSettings = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/settings");
+      setDeliveryFee(res.data.deliveryFee);
+      setVatRate(res.data.vatRate);
+    } catch (error) {
+      console.error("Failed to fetch settings");
+    }
+  };
+
   useEffect(() => {
-    if (user && token) fetchProfile();
+    if (user && token) {
+      fetchProfile();
+      fetchSettings();
+    }
   }, [user, token]);
 
   const validateAddress = () => {
@@ -143,7 +157,10 @@ const Checkout = () => {
             Order ID: <span>{orderId}</span>
           </div>
           <div className="success-actions">
-            <button className="success-btn" onClick={() => navigate("/orders")}>
+            <button className="success-btn" onClick={() => navigate(`/orders/${orderId}/track`)}>
+              Track Order
+            </button>
+            <button className="success-btn success-btn-outline" onClick={() => navigate("/orders")}>
               View Orders
             </button>
             <button className="success-btn success-btn-outline" onClick={() => navigate("/")}>
@@ -284,7 +301,7 @@ const Checkout = () => {
                 <div className="payment-details">
                   <h3>Bkash Payment Details</h3>
                   <div className="payment-instruction">
-                    Send <strong>${total.toFixed(2)}</strong> to <strong>01XXXXXXXXX</strong> (Merchant)
+                    Send <strong>৳{total.toFixed(2)}</strong> to <strong>01XXXXXXXXX</strong> (Merchant)
                   </div>
                   <div className="form-group">
                     <label>Your Bkash Number</label>
@@ -312,7 +329,7 @@ const Checkout = () => {
                 <div className="payment-details">
                   <h3>Nagad Payment Details</h3>
                   <div className="payment-instruction">
-                    Send <strong>${total.toFixed(2)}</strong> to <strong>01XXXXXXXXX</strong> (Merchant)
+                    Send <strong>৳{total.toFixed(2)}</strong> to <strong>01XXXXXXXXX</strong> (Merchant)
                   </div>
                   <div className="form-group">
                     <label>Your Nagad Number</label>
@@ -340,7 +357,7 @@ const Checkout = () => {
                 <div className="payment-details">
                   <h3>Bank Transfer Details</h3>
                   <div className="payment-instruction">
-                    Transfer <strong>${total.toFixed(2)}</strong> to TastyMeals account and provide details below
+                    Transfer <strong>৳{total.toFixed(2)}</strong> to TastyMeals account and provide details below
                   </div>
                   <div className="form-group">
                     <label>Bank Name</label>
@@ -413,7 +430,7 @@ const Checkout = () => {
                       {item.name} x{item.quantity}
                     </span>
                     <span className="review-item-price">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      ৳{(item.price * item.quantity).toFixed(2)}
                     </span>
                   </div>
                 ))}
@@ -422,7 +439,7 @@ const Checkout = () => {
               <div className="step-buttons">
                 <button className="back-btn" onClick={() => setStep(2)}>Back</button>
                 <button className="place-order-btn" onClick={handlePlaceOrder}>
-                  Place Order — ${total.toFixed(2)}
+                  Place Order — ৳{total.toFixed(2)}
                 </button>
               </div>
             </div>
@@ -435,27 +452,27 @@ const Checkout = () => {
             {cart.items.map((item) => (
               <div key={item._id} className="summary-item">
                 <span>{item.name} x{item.quantity}</span>
-                <span>${(item.price * item.quantity).toFixed(2)}</span>
+                <span>৳{(item.price * item.quantity).toFixed(2)}</span>
               </div>
             ))}
           </div>
           <div className="summary-divider"></div>
           <div className="summary-row">
             <span>Subtotal</span>
-            <span>${cartTotal.toFixed(2)}</span>
+            <span>৳{cartTotal.toFixed(2)}</span>
           </div>
           <div className="summary-row">
             <span>Delivery Fee</span>
-            <span>${deliveryFee.toFixed(2)}</span>
+            <span>৳{deliveryFee.toFixed(2)}</span>
           </div>
           <div className="summary-row">
-            <span>Tax</span>
-            <span>${tax.toFixed(2)}</span>
+            <span>VAT ({vatRate}%)</span>
+            <span>৳{tax.toFixed(2)}</span>
           </div>
           <div className="summary-divider"></div>
           <div className="summary-row summary-total">
             <span>Total</span>
-            <span>${total.toFixed(2)}</span>
+            <span>৳{total.toFixed(2)}</span>
           </div>
         </div>
       </div>

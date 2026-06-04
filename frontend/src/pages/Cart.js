@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
 import { FaShoppingCart, FaTrash, FaPlus, FaMinus, FaEdit, FaTimes } from "react-icons/fa";
@@ -24,12 +25,27 @@ const Cart = () => {
   const [editingItem, setEditingItem] = useState(null);
   const [editInstructions, setEditInstructions] = useState("");
   const [editExtras, setEditExtras] = useState([]);
+  const [deliveryFee, setDeliveryFee] = useState(30);
+  const [vatRate, setVatRate] = useState(5);
 
   useEffect(() => {
     if (!user) {
       navigate("/login");
     }
+    fetchSettings();
   }, [user]);
+
+  const fetchSettings = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/settings");
+      setDeliveryFee(res.data.deliveryFee);
+      setVatRate(res.data.vatRate);
+    } catch (error) {
+      console.error("Failed to fetch settings");
+    }
+  };
+
+  const tax = cartTotal * (vatRate / 100);
 
   const handleQuantityChange = (cartItemId, newQty) => {
     if (newQty <= 0) {
@@ -108,7 +124,7 @@ const Cart = () => {
                     )}
                     <div className="cart-item-info">
                       <h4>{item.name}</h4>
-                      <p className="cart-item-price">${item.price.toFixed(2)} each</p>
+                      <p className="cart-item-price">৳{item.price.toFixed(2)} each</p>
                       {item.extras && item.extras.length > 0 && (
                         <div className="cart-item-extras">
                           {item.extras.map((extra) => (
@@ -133,7 +149,7 @@ const Cart = () => {
                         </button>
                       </div>
                       <p className="cart-item-subtotal">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        ৳{(item.price * item.quantity).toFixed(2)}
                       </p>
                       <div className="cart-item-btns">
                         <button className="edit-btn" onClick={() => openEditModal(item)}>
@@ -157,20 +173,20 @@ const Cart = () => {
             <h3>Order Summary</h3>
             <div className="summary-row">
               <span>Subtotal</span>
-              <span>${cartTotal.toFixed(2)}</span>
+              <span>৳{cartTotal.toFixed(2)}</span>
             </div>
             <div className="summary-row">
               <span>Delivery Fee</span>
-              <span>$2.99</span>
+              <span>৳{deliveryFee.toFixed(2)}</span>
             </div>
             <div className="summary-row">
-              <span>Tax</span>
-              <span>${(cartTotal * 0.08).toFixed(2)}</span>
+              <span>VAT ({vatRate}%)</span>
+              <span>৳{tax.toFixed(2)}</span>
             </div>
             <div className="summary-divider"></div>
             <div className="summary-row summary-total">
               <span>Total</span>
-              <span>${(cartTotal + 2.99 + cartTotal * 0.08).toFixed(2)}</span>
+              <span>৳{(cartTotal + deliveryFee + tax).toFixed(2)}</span>
             </div>
             <button className="checkout-btn" onClick={() => navigate("/checkout")}>Proceed to Checkout</button>
           </div>

@@ -1,6 +1,7 @@
 const express = require("express");
 const Order = require("../models/Order");
 const Cart = require("../models/Cart");
+const Settings = require("../models/Settings");
 const auth = require("../middleware/auth");
 
 const router = express.Router();
@@ -14,10 +15,15 @@ router.post("/", auth, async (req, res) => {
       return res.status(400).json({ message: "Cart is empty" });
     }
 
+    let settings = await Settings.findOne();
+    if (!settings) settings = { deliveryFee: 30, vatRate: 5 };
+
     const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const deliveryFee = 2.99;
-    const tax = subtotal * 0.08;
+    const deliveryFee = settings.deliveryFee;
+    const tax = subtotal * (settings.vatRate / 100);
     const total = subtotal + deliveryFee + tax;
+
+    const estimatedDelivery = new Date(Date.now() + 45 * 60 * 1000);
 
     const order = new Order({
       user: req.user.id,
@@ -30,6 +36,10 @@ router.post("/", auth, async (req, res) => {
       deliveryAddress,
       note: note || "",
       status: "confirmed",
+      estimatedDelivery,
+      statusHistory: [
+        { status: "confirmed", time: new Date(), message: "Order has been confirmed" },
+      ],
     });
 
     await order.save();

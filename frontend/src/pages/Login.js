@@ -14,8 +14,14 @@ const Login = () => {
     e.preventDefault();
     const result = await login(email, password);
     if (result.success) {
-      toast.success("Logged in successfully!");
-      navigate("/");
+      const stored = JSON.parse(localStorage.getItem("user"));
+      if (stored && stored.role === "admin") {
+        toast.success("Welcome, Admin!");
+        navigate("/admin");
+      } else {
+        toast.success("Logged in successfully!");
+        navigate("/");
+      }
     } else {
       toast.error(result.message);
     }
