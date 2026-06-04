@@ -428,6 +428,17 @@
   background-color: #c0392b;
 }
 
+.success-btn-outline {
+  background: none;
+  border: 2px solid #e74c3c;
+  color: #e74c3c;
+}
+
+.success-btn-outline:hover {
+  background: #e74c3c;
+  color: #fff;
+}
+
 @media (max-width: 768px) {
   .checkout-layout {
     flex-direction: column;

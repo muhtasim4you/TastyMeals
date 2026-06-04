@@ -143,7 +143,10 @@ const Checkout = () => {
             Order ID: <span>{orderId}</span>
           </div>
           <div className="success-actions">
-            <button className="success-btn" onClick={() => navigate("/")}>
+            <button className="success-btn" onClick={() => navigate("/orders")}>
+              View Orders
+            </button>
+            <button className="success-btn success-btn-outline" onClick={() => navigate("/")}>
               Back to Home
             </button>
           </div>
