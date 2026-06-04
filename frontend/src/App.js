@@ -10,6 +10,7 @@ import Wishlist from "./pages/Wishlist";
 import SearchResults from "./pages/SearchResults";
 import RestaurantDetail from "./pages/RestaurantDetail";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/search" element={<SearchResults />} />
         <Route path="/restaurant/:id" element={<RestaurantDetail />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
       <Footer />
     </div>

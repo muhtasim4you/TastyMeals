@@ -172,7 +172,7 @@ const Cart = () => {
               <span>Total</span>
               <span>${(cartTotal + 2.99 + cartTotal * 0.08).toFixed(2)}</span>
             </div>
-            <button className="checkout-btn">Proceed to Checkout</button>
+            <button className="checkout-btn" onClick={() => navigate("/checkout")}>Proceed to Checkout</button>
           </div>
         </div>
       )}
