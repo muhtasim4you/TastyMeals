@@ -37,4 +37,11 @@ router.post("/", auth, adminOrMerchant, upload.single("image"), (req, res) => {
   res.json({ imageUrl });
 });
 
+router.use((err, req, res, next) => {
+  if (err) {
+    return res.status(400).json({ message: err.message || "Upload failed" });
+  }
+  next();
+});
+
 module.exports = router;

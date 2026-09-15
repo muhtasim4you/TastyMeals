@@ -16,7 +16,7 @@ const Profile = () => {
     email: "",
     phone: "",
     address: { street: "", city: "", state: "", zip: "" },
-    payment: { cardName: "", cardNumber: "", expiry: "", cvv: "" },
+    payment: { cardName: "", cardNumber: "", expiry: "" },
     dietary: { preference: "none", allergies: [] },
   });
 
@@ -68,7 +68,7 @@ const Profile = () => {
         email: res.data.email || "",
         phone: res.data.phone || "",
         address: res.data.address || { street: "", city: "", state: "", zip: "" },
-        payment: res.data.payment || { cardName: "", cardNumber: "", expiry: "", cvv: "" },
+        payment: res.data.payment || { cardName: "", cardNumber: "", expiry: "" },
         dietary: res.data.dietary || { preference: "none", allergies: [] },
       });
     } catch (error) {
@@ -87,7 +87,7 @@ const Profile = () => {
         email: res.data.email,
         phone: res.data.phone || "",
         address: res.data.address || { street: "", city: "", state: "", zip: "" },
-        payment: res.data.payment || { cardName: "", cardNumber: "", expiry: "", cvv: "" },
+        payment: res.data.payment || { cardName: "", cardNumber: "", expiry: "" },
         dietary: res.data.dietary || { preference: "none", allergies: [] },
       });
       toast.success("Profile updated successfully!");
@@ -258,28 +258,17 @@ const Profile = () => {
                   maxLength={19}
                 />
               </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Expiry Date</label>
-                  <input
-                    type="text"
-                    value={profile.payment.expiry}
-                    onChange={(e) => updatePayment("expiry", e.target.value)}
-                    placeholder="MM/YY"
-                    maxLength={5}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>CVV</label>
-                  <input
-                    type="password"
-                    value={profile.payment.cvv}
-                    onChange={(e) => updatePayment("cvv", e.target.value)}
-                    placeholder="CVV"
-                    maxLength={4}
-                  />
-                </div>
+              <div className="form-group">
+                <label>Expiry Date</label>
+                <input
+                  type="text"
+                  value={profile.payment.expiry}
+                  onChange={(e) => updatePayment("expiry", e.target.value)}
+                  placeholder="MM/YY"
+                  maxLength={5}
+                />
               </div>
+              <p className="allergy-hint">Your card number is stored masked and the CVV is never saved.</p>
             </div>
           )}
 

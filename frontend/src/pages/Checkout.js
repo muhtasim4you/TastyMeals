@@ -12,7 +12,7 @@ const POINT_VALUE = 0.5;
 
 const Checkout = () => {
   const { user, token } = useContext(AuthContext);
-  const { cart, cartTotal, clearCart } = useContext(CartContext);
+  const { cart, cartLoaded, cartTotal, clearCart } = useContext(CartContext);
   const { balance, fetchRewards } = useContext(RewardContext);
   const navigate = useNavigate();
   const [usePoints, setUsePoints] = useState(false);
@@ -54,10 +54,10 @@ const Checkout = () => {
   useEffect(() => {
     if (!user) {
       navigate("/login");
-    } else if (cart.items.length === 0 && !orderPlaced) {
+    } else if (cartLoaded && cart.items.length === 0 && !orderPlaced) {
       navigate("/cart");
     }
-  }, [user]);
+  }, [user, cartLoaded, cart.items.length, orderPlaced]);
 
   const fetchProfile = async () => {
     try {

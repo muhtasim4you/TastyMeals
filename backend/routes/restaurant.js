@@ -19,7 +19,8 @@ router.get("/search", async (req, res) => {
       return res.json({ restaurants: [], items: [] });
     }
 
-    const regex = new RegExp(q, "i");
+    const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(escapedQ, "i");
 
     const restaurants = await Restaurant.find({
       $or: [

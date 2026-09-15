@@ -7,6 +7,7 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const { user, token } = useContext(AuthContext);
   const [cart, setCart] = useState({ items: [] });
+  const [cartLoaded, setCartLoaded] = useState(false);
 
   const API = "http://localhost:5000/api/cart";
 
@@ -15,6 +16,7 @@ export const CartProvider = ({ children }) => {
       fetchCart();
     } else {
       setCart({ items: [] });
+      setCartLoaded(true);
     }
   }, [user, token]);
 
@@ -26,6 +28,8 @@ export const CartProvider = ({ children }) => {
       setCart(res.data);
     } catch (error) {
       console.error("Failed to fetch cart");
+    } finally {
+      setCartLoaded(true);
     }
   };
 
@@ -80,7 +84,7 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, updateCartItem, removeFromCart, clearCart, cartCount, cartTotal }}
+      value={{ cart, cartLoaded, addToCart, updateCartItem, removeFromCart, clearCart, cartCount, cartTotal }}
     >
       {children}
     </CartContext.Provider>

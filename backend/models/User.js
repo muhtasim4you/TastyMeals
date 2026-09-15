@@ -37,9 +37,8 @@ const userSchema = new mongoose.Schema(
     },
     payment: {
       cardName: { type: String, default: "" },
-      cardNumber: { type: String, default: "" },
+      cardNumber: { type: String, default: "" }, // stored masked (last 4 digits only) — never the full PAN
       expiry: { type: String, default: "" },
-      cvv: { type: String, default: "" },
     },
     dietary: {
       preference: { type: String, default: "none" },

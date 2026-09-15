@@ -27,6 +27,7 @@
 }
 
 .banner-btn {
+  display: inline-block;
   background-color: #fff;
   color: #e74c3c;
   border: none;
@@ -36,6 +37,7 @@
   font-weight: 600;
   cursor: pointer;
   font-family: "Poppins", sans-serif;
+  text-decoration: none;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 

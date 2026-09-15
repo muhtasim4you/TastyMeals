@@ -38,6 +38,19 @@ router.post("/", auth, async (req, res) => {
       const promo = await PromoCode.findOne({ code: promoCode.toUpperCase().trim() });
       if (!promo) return res.status(400).json({ message: "Invalid promo code" });
       const { discount } = await validatePromo(promo, req.user.id, subtotal, preDiscountTotal);
+
+      // Atomically reserve one use so two concurrent orders can't both slip in under the usage limit.
+      const reserved = await PromoCode.findOneAndUpdate(
+        {
+          _id: promo._id,
+          $or: [{ usageLimit: null }, { $expr: { $lt: ["$usedCount", "$usageLimit"] } }],
+        },
+        { $inc: { usedCount: 1 } }
+      );
+      if (!reserved) {
+        return res.status(400).json({ message: "This promo code has just reached its usage limit" });
+      }
+
       promoDiscount = discount;
       appliedPromoCode = promo.code;
     }
@@ -86,10 +99,6 @@ router.post("/", auth, async (req, res) => {
     });
 
     await order.save();
-
-    if (appliedPromoCode) {
-      await PromoCode.updateOne({ code: appliedPromoCode }, { $inc: { usedCount: 1 } });
-    }
 
     if (pointsRedeemed > 0) {
       user.rewardPoints -= pointsRedeemed;

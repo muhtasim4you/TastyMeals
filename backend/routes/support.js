@@ -32,6 +32,7 @@ router.post("/", auth, async (req, res) => {
     }
 
     const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
     const ticket = new SupportTicket({
       user: req.user.id,
       subject,
@@ -57,6 +58,7 @@ router.post("/:id/messages", auth, async (req, res) => {
     }
 
     const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
     ticket.messages.push({ sender: "user", senderName: user.name, message });
     if (ticket.status === "resolved") ticket.status = "open";
     await ticket.save();

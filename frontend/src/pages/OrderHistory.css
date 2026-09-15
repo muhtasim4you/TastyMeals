@@ -456,6 +456,11 @@
   font-size: 1.05rem;
 }
 
+.pricing-discount {
+  color: #27ae60;
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .order-card-header {
     flex-direction: column;

@@ -24,7 +24,15 @@ router.put("/", auth, async (req, res) => {
     if (name) updateFields.name = name;
     if (phone !== undefined) updateFields.phone = phone;
     if (address) updateFields.address = address;
-    if (payment) updateFields.payment = payment;
+    if (payment) {
+      const paymentUpdate = { cardName: payment.cardName || "", expiry: payment.expiry || "" };
+      const digitsOnly = (payment.cardNumber || "").replace(/\D/g, "");
+      if (digitsOnly.length >= 4) {
+        paymentUpdate.cardNumber = `**** **** **** ${digitsOnly.slice(-4)}`;
+      }
+      // CVV is intentionally never persisted.
+      updateFields.payment = paymentUpdate;
+    }
     if (dietary) {
       // Merge field-by-field so this doesn't wipe out diet-plan health
       // metrics (age/weight/height/goal) that live in the same subdocument

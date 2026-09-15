@@ -45,7 +45,7 @@ const TopRestaurants = () => {
   };
 
   return (
-    <section className="top-restaurants">
+    <section className="top-restaurants" id="top-restaurants">
       <h2 className="section-title">Top Restaurants</h2>
       <p className="section-subtitle">Recommended for you</p>
       <div className="restaurant-grid">

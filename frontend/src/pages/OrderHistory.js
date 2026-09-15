@@ -279,6 +279,18 @@ const OrderHistory = () => {
                       <span>VAT</span>
                       <span>৳{order.tax.toFixed(2)}</span>
                     </div>
+                    {order.promoDiscount > 0 && (
+                      <div className="pricing-row pricing-discount">
+                        <span>Promo Discount {order.promoCode && `(${order.promoCode})`}</span>
+                        <span>-৳{order.promoDiscount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    {order.pointsDiscount > 0 && (
+                      <div className="pricing-row pricing-discount">
+                        <span>Points Redeemed</span>
+                        <span>-৳{order.pointsDiscount.toFixed(2)}</span>
+                      </div>
+                    )}
                     <div className="pricing-divider"></div>
                     <div className="pricing-row pricing-total">
                       <span>Total</span>

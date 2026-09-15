@@ -24,7 +24,9 @@ router.get("/stats", auth, admin, async (req, res) => {
     const totalRestaurants = await Restaurant.countDocuments();
     const totalOrders = await Order.countDocuments();
     const orders = await Order.find();
-    const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
+    const totalRevenue = orders
+      .filter((o) => o.status !== "cancelled")
+      .reduce((sum, o) => sum + o.total, 0);
     const pendingOrders = await Order.countDocuments({ status: { $nin: ["delivered", "cancelled"] } });
 
     res.json({ totalUsers, totalRestaurants, totalOrders, totalRevenue, pendingOrders });
@@ -59,6 +61,12 @@ router.delete("/users/:id", auth, admin, async (req, res) => {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
     if (user.role === "admin") return res.status(400).json({ message: "Cannot delete admin" });
+    if (user.role === "merchant") {
+      const ownedRestaurant = await Restaurant.findOne({ owner: req.params.id });
+      if (ownedRestaurant) {
+        return res.status(400).json({ message: "Cannot delete a merchant who still owns a restaurant. Delete or reassign the restaurant first." });
+      }
+    }
     await User.findByIdAndDelete(req.params.id);
     res.json({ message: "User deleted" });
   } catch (error) {
@@ -104,6 +112,13 @@ router.put("/restaurants/:id", auth, admin, async (req, res) => {
 
 router.delete("/restaurants/:id", auth, admin, async (req, res) => {
   try {
+    const activeDonation = await Donation.findOne({
+      restaurant: req.params.id,
+      status: { $in: ["pending", "accepted"] },
+    });
+    if (activeDonation) {
+      return res.status(400).json({ message: "Cannot delete a restaurant with an active donation in progress" });
+    }
     await Restaurant.findByIdAndDelete(req.params.id);
     res.json({ message: "Restaurant deleted" });
   } catch (error) {
@@ -272,6 +287,13 @@ router.put("/charities/:id", auth, admin, async (req, res) => {
 
 router.delete("/charities/:id", auth, admin, async (req, res) => {
   try {
+    const activeDonation = await Donation.findOne({
+      charity: req.params.id,
+      status: { $in: ["pending", "accepted"] },
+    });
+    if (activeDonation) {
+      return res.status(400).json({ message: "Cannot delete a charity with an active donation in progress" });
+    }
     await Charity.findByIdAndDelete(req.params.id);
     res.json({ message: "Charity deleted" });
   } catch (error) {
@@ -305,7 +327,7 @@ router.put("/donations/:id/status", auth, admin, async (req, res) => {
       .populate("charity", "name location");
     if (!donation) return res.status(404).json({ message: "Donation not found" });
 
-    if (status === "picked_up") {
+    if (status === "picked_up" && donation.restaurant && donation.charity) {
       await Notification.create({
         title: "Surplus Food Rescued",
         message: `${donation.restaurant.name} donated ${donation.quantity} ${donation.unit} of ${donation.foodItem} to ${donation.charity.name}, reducing food waste in the community.`,
@@ -448,6 +470,7 @@ router.post("/support/:id/messages", auth, admin, async (req, res) => {
     if (!ticket) return res.status(404).json({ message: "Ticket not found" });
 
     const admin_ = await User.findById(req.user.id);
+    if (!admin_) return res.status(404).json({ message: "Admin user not found" });
     ticket.messages.push({ sender: "support", senderName: admin_.name, message });
     if (ticket.status === "open") ticket.status = "in_progress";
     await ticket.save();
