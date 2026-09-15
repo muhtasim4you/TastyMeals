@@ -15,6 +15,7 @@ import {
   FaChartBar,
   FaBriefcase,
   FaStar,
+  FaHeadset,
 } from "react-icons/fa";
 import "./Admin.css";
 
@@ -75,6 +76,9 @@ const AdminLayout = () => {
           </Link>
           <Link to="/admin/reviews" className={`admin-nav-item ${isActive("/admin/reviews") ? "active" : ""}`}>
             <FaStar /> Reviews
+          </Link>
+          <Link to="/admin/support" className={`admin-nav-item ${location.pathname.startsWith("/admin/support") ? "active" : ""}`}>
+            <FaHeadset /> Support
           </Link>
           <Link to="/admin/settings" className={`admin-nav-item ${isActive("/admin/settings") ? "active" : ""}`}>
             <FaCog /> Settings

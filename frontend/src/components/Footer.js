@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaUtensils, FaStore, FaBriefcase } from "react-icons/fa";
+import { FaUtensils, FaStore, FaBriefcase, FaHeadset } from "react-icons/fa";
 import "./Footer.css";
 
 const Footer = () => {
@@ -24,6 +24,9 @@ const Footer = () => {
           </Link>
           <Link to="/jobs" className="footer-partner-link footer-jobs-link">
             <FaBriefcase /> We're hiring — see open positions
+          </Link>
+          <Link to="/support" className="footer-partner-link footer-support-link">
+            <FaHeadset /> Need help? Contact Support
           </Link>
         </div>
       </div>

@@ -12,6 +12,7 @@ const WastageLog = require("../models/WastageLog");
 const JobPosting = require("../models/JobPosting");
 const JobApplication = require("../models/JobApplication");
 const Review = require("../models/Review");
+const SupportTicket = require("../models/SupportTicket");
 
 const router = express.Router();
 
@@ -412,6 +413,63 @@ router.delete("/reviews/:id", auth, admin, async (req, res) => {
     await Restaurant.findByIdAndUpdate(review.restaurant, { rating: Math.round(avg * 10) / 10 });
 
     res.json({ message: "Review removed" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ===== SUPPORT TICKET MANAGEMENT =====
+router.get("/support", auth, admin, async (req, res) => {
+  try {
+    const tickets = await SupportTicket.find().populate("user", "name email").sort({ createdAt: -1 });
+    res.json(tickets);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.get("/support/:id", auth, admin, async (req, res) => {
+  try {
+    const ticket = await SupportTicket.findById(req.params.id).populate("user", "name email");
+    if (!ticket) return res.status(404).json({ message: "Ticket not found" });
+    res.json(ticket);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.post("/support/:id/messages", auth, admin, async (req, res) => {
+  try {
+    const { message } = req.body;
+    if (!message) return res.status(400).json({ message: "Message is required" });
+
+    const ticket = await SupportTicket.findById(req.params.id);
+    if (!ticket) return res.status(404).json({ message: "Ticket not found" });
+
+    const admin_ = await User.findById(req.user.id);
+    ticket.messages.push({ sender: "support", senderName: admin_.name, message });
+    if (ticket.status === "open") ticket.status = "in_progress";
+    await ticket.save();
+
+    const populated = await SupportTicket.findById(ticket._id).populate("user", "name email");
+    res.json(populated);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/support/:id/status", auth, admin, async (req, res) => {
+  try {
+    const { status } = req.body;
+    const validStatuses = ["open", "in_progress", "resolved", "closed"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+
+    const ticket = await SupportTicket.findByIdAndUpdate(req.params.id, { status }, { new: true })
+      .populate("user", "name email");
+    if (!ticket) return res.status(404).json({ message: "Ticket not found" });
+    res.json(ticket);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

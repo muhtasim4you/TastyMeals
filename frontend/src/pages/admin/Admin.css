@@ -720,6 +720,91 @@
   white-space: nowrap;
 }
 
+/* ===== SUPPORT TICKET THREAD ===== */
+.thread-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.thread-message {
+  max-width: 75%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.thread-message-user {
+  align-self: flex-end;
+  background: #e74c3c;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.thread-message-support {
+  align-self: flex-start;
+  background: #f5f5f5;
+  color: #333;
+  border-bottom-left-radius: 4px;
+}
+
+.thread-message-sender {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  opacity: 0.85;
+}
+
+.thread-message-time {
+  font-size: 0.68rem;
+  opacity: 0.7;
+  margin-top: 6px;
+  display: block;
+}
+
+.thread-reply-form {
+  display: flex;
+  gap: 10px;
+}
+
+.thread-reply-form textarea {
+  flex: 1;
+  padding: 12px 14px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  resize: none;
+}
+
+.thread-reply-form textarea:focus {
+  border-color: #3498db;
+}
+
+.thread-send-btn {
+  padding: 0 22px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.thread-send-btn:hover {
+  background-color: #2980b9;
+}
+
+.thread-send-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .payment-badge {
   padding: 3px 10px;
   background: #f0f0f0;

@@ -15,6 +15,8 @@ import Jobs from "./pages/Jobs";
 import JobApply from "./pages/JobApply";
 import MyApplications from "./pages/MyApplications";
 import DietPlanner from "./pages/DietPlanner";
+import Support from "./pages/Support";
+import SupportTicket from "./pages/SupportTicket";
 import RestaurantDetail from "./pages/RestaurantDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -40,6 +42,8 @@ import ManageNotifications from "./pages/admin/ManageNotifications";
 import ManageWastage from "./pages/admin/ManageWastage";
 import ManageJobs from "./pages/admin/ManageJobs";
 import ManageReviews from "./pages/admin/ManageReviews";
+import ManageSupport from "./pages/admin/ManageSupport";
+import AdminSupportTicket from "./pages/admin/AdminSupportTicket";
 import ManageSettings from "./pages/admin/ManageSettings";
 
 const App = () => {
@@ -60,6 +64,8 @@ const App = () => {
           <Route path="wastage" element={<ManageWastage />} />
           <Route path="jobs" element={<ManageJobs />} />
           <Route path="reviews" element={<ManageReviews />} />
+          <Route path="support" element={<ManageSupport />} />
+          <Route path="support/:id" element={<AdminSupportTicket />} />
           <Route path="settings" element={<ManageSettings />} />
         </Route>
 
@@ -94,6 +100,8 @@ const App = () => {
                 <Route path="/jobs/:id/apply" element={<JobApply />} />
                 <Route path="/my-applications" element={<MyApplications />} />
                 <Route path="/diet-plan" element={<DietPlanner />} />
+                <Route path="/support" element={<Support />} />
+                <Route path="/support/:id" element={<SupportTicket />} />
                 <Route path="/restaurant/:id" element={<RestaurantDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />

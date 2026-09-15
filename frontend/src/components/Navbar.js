@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
 import { NotificationContext } from "../context/NotificationContext";
 import { RewardContext } from "../context/RewardContext";
-import { FaUtensils, FaSearch, FaShoppingCart, FaFire, FaBell, FaSeedling, FaBriefcase, FaAppleAlt } from "react-icons/fa";
+import { FaUtensils, FaSearch, FaShoppingCart, FaFire, FaBell, FaSeedling, FaBriefcase, FaAppleAlt, FaHeadset } from "react-icons/fa";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -77,6 +77,11 @@ const Navbar = () => {
             <li>
               <Link to="/rewards" className="rewards-pill">
                 <FaSeedling /> {balance}
+              </Link>
+            </li>
+            <li>
+              <Link to="/support" className="cart-link" title="Support">
+                <FaHeadset />
               </Link>
             </li>
             <li>
