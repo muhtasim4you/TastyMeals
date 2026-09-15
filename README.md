@@ -64,15 +64,6 @@ Before running the project, make sure you have:
 - MongoDB running locally
 - A terminal or command prompt
 
-## Environment Setup
-
-Create a `.env` file inside the `backend` folder with the following values:
-
-```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/tastymeals
-JWT_SECRET=your_super_secret_key_here
-```
 
 A sample environment is already present in `backend/.env` for local development.
 
