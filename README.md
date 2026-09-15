@@ -165,5 +165,3 @@ To keep development smooth:
 - Run backend and frontend in separate terminals.
 - Ensure MongoDB is running before starting the backend.
 - Seed data is created through the backend setup flow.
-
-If you want, I can also generate a more polished version of this README for GitHub, including badges, screenshots, and a deployment section.
