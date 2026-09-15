@@ -4,6 +4,8 @@ const Cart = require("../models/Cart");
 const Settings = require("../models/Settings");
 const User = require("../models/User");
 const RewardTransaction = require("../models/RewardTransaction");
+const PromoCode = require("../models/PromoCode");
+const validatePromo = require("../utils/validatePromo");
 const auth = require("../middleware/auth");
 
 const router = express.Router();
@@ -13,7 +15,7 @@ const POINTS_PER_RESCUED_UNIT = 10; // points earned per unit of a discounted/ne
 
 router.post("/", auth, async (req, res) => {
   try {
-    const { payment, deliveryAddress, note, redeemPoints } = req.body;
+    const { payment, deliveryAddress, note, redeemPoints, promoCode } = req.body;
 
     const cart = await Cart.findOne({ user: req.user.id });
     if (!cart || cart.items.length === 0) {
@@ -30,16 +32,28 @@ router.post("/", auth, async (req, res) => {
     const tax = subtotal * (settings.vatRate / 100);
     const preDiscountTotal = subtotal + deliveryFee + tax;
 
+    let promoDiscount = 0;
+    let appliedPromoCode = "";
+    if (promoCode) {
+      const promo = await PromoCode.findOne({ code: promoCode.toUpperCase().trim() });
+      if (!promo) return res.status(400).json({ message: "Invalid promo code" });
+      const { discount } = await validatePromo(promo, req.user.id, subtotal, preDiscountTotal);
+      promoDiscount = discount;
+      appliedPromoCode = promo.code;
+    }
+
+    const afterPromoTotal = preDiscountTotal - promoDiscount;
+
     let pointsRedeemed = 0;
     let pointsDiscount = 0;
     const requestedPoints = Math.min(Math.max(0, redeemPoints || 0), user.rewardPoints);
     if (requestedPoints > 0) {
       const requestedValue = requestedPoints * POINT_VALUE;
-      pointsDiscount = Math.min(requestedValue, preDiscountTotal);
+      pointsDiscount = Math.min(requestedValue, afterPromoTotal);
       pointsRedeemed = Math.round(pointsDiscount / POINT_VALUE);
     }
 
-    const total = preDiscountTotal - pointsDiscount;
+    const total = afterPromoTotal - pointsDiscount;
 
     const rescuedUnits = cart.items.reduce(
       (sum, item) => sum + (item.isRescuedDeal ? item.quantity : 0),
@@ -56,6 +70,8 @@ router.post("/", auth, async (req, res) => {
       deliveryFee,
       tax,
       pointsDiscount,
+      promoCode: appliedPromoCode,
+      promoDiscount,
       total,
       pointsEarned,
       pointsRedeemed,
@@ -70,6 +86,10 @@ router.post("/", auth, async (req, res) => {
     });
 
     await order.save();
+
+    if (appliedPromoCode) {
+      await PromoCode.updateOne({ code: appliedPromoCode }, { $inc: { usedCount: 1 } });
+    }
 
     if (pointsRedeemed > 0) {
       user.rewardPoints -= pointsRedeemed;

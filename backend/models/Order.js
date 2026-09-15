@@ -25,6 +25,8 @@ const orderSchema = new mongoose.Schema(
     deliveryFee: { type: Number, default: 30 },
     tax: { type: Number, required: true },
     pointsDiscount: { type: Number, default: 0 },
+    promoCode: { type: String, default: "" },
+    promoDiscount: { type: Number, default: 0 },
     total: { type: Number, required: true },
     pointsEarned: { type: Number, default: 0 },
     pointsRedeemed: { type: Number, default: 0 },

@@ -109,6 +109,17 @@
   color: #2980b9 !important;
 }
 
+.navbar-offers-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #9b59b6 !important;
+}
+
+.navbar-offers-link:hover {
+  color: #8e44ad !important;
+}
+
 .navbar-right {
   display: flex;
   align-items: center;

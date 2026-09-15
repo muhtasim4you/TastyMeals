@@ -2,13 +2,14 @@ import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { NotificationContext } from "../context/NotificationContext";
-import { FaBell, FaLeaf, FaHandHoldingHeart, FaFire } from "react-icons/fa";
+import { FaBell, FaLeaf, FaHandHoldingHeart, FaFire, FaTag } from "react-icons/fa";
 import "./Notifications.css";
 
 const typeIcons = {
   initiative: FaLeaf,
   donation_impact: FaHandHoldingHeart,
   deal: FaFire,
+  promo: FaTag,
 };
 
 const timeAgo = (dateString) => {

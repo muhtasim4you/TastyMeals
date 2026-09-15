@@ -116,6 +116,10 @@
   background: #e74c3c;
 }
 
+.notification-icon.promo {
+  background: #9b59b6;
+}
+
 .notification-body {
   flex: 1;
 }

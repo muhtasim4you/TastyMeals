@@ -9,6 +9,7 @@ const typeLabels = {
   initiative: "Initiative",
   donation_impact: "Donation Impact",
   deal: "Deal Alert",
+  promo: "Promo Code",
 };
 
 const ManageNotifications = () => {
@@ -88,6 +89,7 @@ const ManageNotifications = () => {
                   <option value="initiative">Initiative</option>
                   <option value="donation_impact">Donation Impact</option>
                   <option value="deal">Deal Alert</option>
+                  <option value="promo">Promo Code</option>
                 </select>
               </div>
             </div>

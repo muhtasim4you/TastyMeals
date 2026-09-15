@@ -4,7 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
 import { RewardContext } from "../context/RewardContext";
-import { FaCheckCircle, FaMobileAlt, FaUniversity, FaSeedling } from "react-icons/fa";
+import { FaCheckCircle, FaMobileAlt, FaUniversity, FaSeedling, FaTag, FaTimes } from "react-icons/fa";
 import toast from "react-hot-toast";
 import "./Checkout.css";
 
@@ -16,6 +16,9 @@ const Checkout = () => {
   const { balance, fetchRewards } = useContext(RewardContext);
   const navigate = useNavigate();
   const [usePoints, setUsePoints] = useState(false);
+  const [promoInput, setPromoInput] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState(null);
+  const [applyingPromo, setApplyingPromo] = useState(false);
 
   const [step, setStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -43,8 +46,10 @@ const Checkout = () => {
 
   const tax = cartTotal * (vatRate / 100);
   const preDiscountTotal = cartTotal + deliveryFee + tax;
-  const pointsDiscount = usePoints ? Math.min(balance * POINT_VALUE, preDiscountTotal) : 0;
-  const total = preDiscountTotal - pointsDiscount;
+  const promoDiscount = appliedPromo ? appliedPromo.discount : 0;
+  const afterPromoTotal = preDiscountTotal - promoDiscount;
+  const pointsDiscount = usePoints ? Math.min(balance * POINT_VALUE, afterPromoTotal) : 0;
+  const total = afterPromoTotal - pointsDiscount;
 
   useEffect(() => {
     if (!user) {
@@ -91,6 +96,29 @@ const Checkout = () => {
       fetchSettings();
     }
   }, [user, token]);
+
+  const applyPromo = async () => {
+    if (!promoInput.trim()) return;
+    setApplyingPromo(true);
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/promos/validate",
+        { code: promoInput.trim(), subtotal: cartTotal, deliveryFee, tax },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setAppliedPromo(res.data);
+      toast.success(`Promo code ${res.data.code} applied!`);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Invalid promo code");
+    } finally {
+      setApplyingPromo(false);
+    }
+  };
+
+  const removePromo = () => {
+    setAppliedPromo(null);
+    setPromoInput("");
+  };
 
   const validateAddress = () => {
     if (!address.street || !address.city || !address.state || !address.zip) {
@@ -142,6 +170,7 @@ const Checkout = () => {
           deliveryAddress: address,
           note,
           redeemPoints: usePoints ? balance : 0,
+          promoCode: appliedPromo ? appliedPromo.code : undefined,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -486,6 +515,32 @@ const Checkout = () => {
             <span>৳{tax.toFixed(2)}</span>
           </div>
 
+          {appliedPromo ? (
+            <div className="promo-applied-box">
+              <span><FaTag /> {appliedPromo.code} applied</span>
+              <button type="button" onClick={removePromo}><FaTimes /></button>
+            </div>
+          ) : (
+            <div className="promo-input-row">
+              <input
+                type="text"
+                placeholder="Promo code"
+                value={promoInput}
+                onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
+              />
+              <button type="button" onClick={applyPromo} disabled={applyingPromo || !promoInput.trim()}>
+                {applyingPromo ? "..." : "Apply"}
+              </button>
+            </div>
+          )}
+
+          {promoDiscount > 0 && (
+            <div className="summary-row summary-discount">
+              <span>Promo Discount</span>
+              <span>-৳{promoDiscount.toFixed(2)}</span>
+            </div>
+          )}
+
           {balance > 0 && (
             <div className="points-redeem-box">
               <label>
@@ -494,7 +549,7 @@ const Checkout = () => {
                   checked={usePoints}
                   onChange={(e) => setUsePoints(e.target.checked)}
                 />
-                Use my {balance} points (-৳{Math.min(balance * POINT_VALUE, preDiscountTotal).toFixed(2)})
+                Use my {balance} points (-৳{Math.min(balance * POINT_VALUE, afterPromoTotal).toFixed(2)})
               </label>
             </div>
           )}

@@ -13,6 +13,7 @@ const JobPosting = require("../models/JobPosting");
 const JobApplication = require("../models/JobApplication");
 const Review = require("../models/Review");
 const SupportTicket = require("../models/SupportTicket");
+const PromoCode = require("../models/PromoCode");
 
 const router = express.Router();
 
@@ -470,6 +471,96 @@ router.put("/support/:id/status", auth, admin, async (req, res) => {
       .populate("user", "name email");
     if (!ticket) return res.status(404).json({ message: "Ticket not found" });
     res.json(ticket);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ===== PROMO CODE MANAGEMENT =====
+router.get("/promos", auth, admin, async (req, res) => {
+  try {
+    const promos = await PromoCode.find().sort({ createdAt: -1 });
+    res.json(promos);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.post("/promos", auth, admin, async (req, res) => {
+  try {
+    const {
+      code, description, discountType, discountValue, maxDiscount,
+      minOrderValue, expiryDate, usageLimit, usageLimitPerUser, visible, active,
+    } = req.body;
+
+    if (!code || !discountValue) {
+      return res.status(400).json({ message: "Code and discount value are required" });
+    }
+
+    const existing = await PromoCode.findOne({ code: code.toUpperCase().trim() });
+    if (existing) return res.status(400).json({ message: "A promo code with this code already exists" });
+
+    const promo = new PromoCode({
+      code: code.toUpperCase().trim(),
+      description: description || "",
+      discountType: discountType || "percentage",
+      discountValue,
+      maxDiscount: maxDiscount || null,
+      minOrderValue: minOrderValue || 0,
+      expiryDate: expiryDate || null,
+      usageLimit: usageLimit || null,
+      usageLimitPerUser: usageLimitPerUser || 1,
+      visible: visible !== undefined ? visible : true,
+      active: active !== undefined ? active : true,
+    });
+    await promo.save();
+
+    const discountText =
+      promo.discountType === "percentage" ? `${promo.discountValue}% off` : `৳${promo.discountValue} off`;
+    await Notification.create({
+      title: `New Promo Code: ${promo.code}`,
+      message: `${discountText}${promo.description ? " — " + promo.description : ""}. Use code ${promo.code} at checkout!`,
+      type: "promo",
+    });
+
+    res.status(201).json(promo);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/promos/:id", auth, admin, async (req, res) => {
+  try {
+    const {
+      description, discountType, discountValue, maxDiscount,
+      minOrderValue, expiryDate, usageLimit, usageLimitPerUser, active, visible,
+    } = req.body;
+
+    const promo = await PromoCode.findById(req.params.id);
+    if (!promo) return res.status(404).json({ message: "Promo code not found" });
+
+    if (description !== undefined) promo.description = description;
+    if (discountType !== undefined) promo.discountType = discountType;
+    if (discountValue !== undefined) promo.discountValue = discountValue;
+    if (maxDiscount !== undefined) promo.maxDiscount = maxDiscount || null;
+    if (minOrderValue !== undefined) promo.minOrderValue = minOrderValue;
+    if (expiryDate !== undefined) promo.expiryDate = expiryDate || null;
+    if (usageLimit !== undefined) promo.usageLimit = usageLimit || null;
+    if (usageLimitPerUser !== undefined) promo.usageLimitPerUser = usageLimitPerUser;
+    if (active !== undefined) promo.active = active;
+    if (visible !== undefined) promo.visible = visible;
+
+    await promo.save();
+    res.json(promo);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.delete("/promos/:id", auth, admin, async (req, res) => {
+  try {
+    await PromoCode.findByIdAndDelete(req.params.id);
+    res.json({ message: "Promo code deleted" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

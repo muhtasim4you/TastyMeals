@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import Wishlist from "./pages/Wishlist";
 import SearchResults from "./pages/SearchResults";
 import Deals from "./pages/Deals";
+import Offers from "./pages/Offers";
 import Notifications from "./pages/Notifications";
 import Rewards from "./pages/Rewards";
 import Jobs from "./pages/Jobs";
@@ -44,6 +45,7 @@ import ManageJobs from "./pages/admin/ManageJobs";
 import ManageReviews from "./pages/admin/ManageReviews";
 import ManageSupport from "./pages/admin/ManageSupport";
 import AdminSupportTicket from "./pages/admin/AdminSupportTicket";
+import ManagePromoCodes from "./pages/admin/ManagePromoCodes";
 import ManageSettings from "./pages/admin/ManageSettings";
 
 const App = () => {
@@ -66,6 +68,7 @@ const App = () => {
           <Route path="reviews" element={<ManageReviews />} />
           <Route path="support" element={<ManageSupport />} />
           <Route path="support/:id" element={<AdminSupportTicket />} />
+          <Route path="promos" element={<ManagePromoCodes />} />
           <Route path="settings" element={<ManageSettings />} />
         </Route>
 
@@ -94,6 +97,7 @@ const App = () => {
                 <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/search" element={<SearchResults />} />
                 <Route path="/deals" element={<Deals />} />
+                <Route path="/offers" element={<Offers />} />
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/rewards" element={<Rewards />} />
                 <Route path="/jobs" element={<Jobs />} />
