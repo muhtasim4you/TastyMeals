@@ -15,6 +15,10 @@ import Checkout from "./pages/Checkout";
 import OrderHistory from "./pages/OrderHistory";
 import OrderTracking from "./pages/OrderTracking";
 import AdminLayout from "./pages/admin/AdminLayout";
+import MerchantRegister from "./pages/merchant/MerchantRegister";
+import MerchantLayout from "./pages/merchant/MerchantLayout";
+import MerchantDashboard from "./pages/merchant/MerchantDashboard";
+import MerchantMenu from "./pages/merchant/MerchantMenu";
 import Dashboard from "./pages/admin/Dashboard";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageRestaurants from "./pages/admin/ManageRestaurants";
@@ -35,6 +39,13 @@ const App = () => {
           <Route path="users" element={<ManageUsers />} />
           <Route path="orders" element={<ManageOrders />} />
           <Route path="settings" element={<ManageSettings />} />
+        </Route>
+
+        {/* Merchant Routes — no Navbar/Footer */}
+        <Route path="/merchant/register" element={<MerchantRegister />} />
+        <Route path="/merchant" element={<MerchantLayout />}>
+          <Route index element={<MerchantDashboard />} />
+          <Route path="menu" element={<MerchantMenu />} />
         </Route>
 
         {/* User Routes — with Navbar/Footer */}

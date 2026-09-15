@@ -28,7 +28,18 @@ router.get("/stats", auth, admin, async (req, res) => {
 router.get("/users", auth, admin, async (req, res) => {
   try {
     const users = await User.find().select("-password").sort({ createdAt: -1 });
-    res.json(users);
+    const restaurants = await Restaurant.find({ owner: { $ne: null } }).select("name owner");
+    const ownerToRestaurant = {};
+    restaurants.forEach((r) => {
+      ownerToRestaurant[r.owner.toString()] = { id: r._id, name: r.name };
+    });
+
+    const usersWithRestaurant = users.map((u) => ({
+      ...u.toObject(),
+      restaurant: u.role === "merchant" ? ownerToRestaurant[u._id.toString()] || null : undefined,
+    }));
+
+    res.json(usersWithRestaurant);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

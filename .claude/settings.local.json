@@ -8,7 +8,23 @@
       "Bash(mv server:*)",
       "Bash(cp -r client frontend)",
       "Bash(cp -r server backend)",
-      "Bash(rm -rf client server)"
+      "Bash(rm -rf client server)",
+      "Bash(node -c routes/restaurant.js)",
+      "Bash(node -c routes/admin.js)",
+      "Bash(node -c models/Restaurant.js)",
+      "Bash(node -c seed.js)",
+      "Bash(tasklist)",
+      "Bash(node seed.js)",
+      "Bash(curl -sf http://localhost:5000/)",
+      "Bash(break)",
+      "Bash(curl -s http://localhost:5000/)",
+      "Bash(curl -s http://localhost:5000/api/restaurants/discounted)",
+      "Bash(curl -sf http://localhost:3000/)",
+      "Read(//tmp/**)",
+      "Bash(curl *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
     ]
   }
 }

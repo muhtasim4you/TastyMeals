@@ -45,6 +45,7 @@ const ManageUsers = () => {
               <th>Name</th>
               <th>Email</th>
               <th>Role</th>
+              <th>Restaurant</th>
               <th>Phone</th>
               <th>Joined</th>
               <th>Actions</th>
@@ -57,6 +58,13 @@ const ManageUsers = () => {
                 <td>{user.email}</td>
                 <td>
                   <span className={`role-badge ${user.role}`}>{user.role}</span>
+                </td>
+                <td>
+                  {user.role === "merchant" ? (
+                    user.restaurant ? user.restaurant.name : <span className="table-muted">No restaurant</span>
+                  ) : (
+                    <span className="table-muted">-</span>
+                  )}
                 </td>
                 <td>{user.phone || "-"}</td>
                 <td>{new Date(user.createdAt).toLocaleDateString()}</td>

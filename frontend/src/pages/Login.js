@@ -18,6 +18,9 @@ const Login = () => {
       if (stored && stored.role === "admin") {
         toast.success("Welcome, Admin!");
         navigate("/admin");
+      } else if (stored && stored.role === "merchant") {
+        toast.success("Welcome back!");
+        navigate("/merchant");
       } else {
         toast.success("Logged in successfully!");
         navigate("/");

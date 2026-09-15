@@ -10,6 +10,7 @@ const restaurantRoutes = require("./routes/restaurant");
 const cartRoutes = require("./routes/cart");
 const orderRoutes = require("./routes/order");
 const adminRoutes = require("./routes/admin");
+const merchantRoutes = require("./routes/merchant");
 const uploadRoutes = require("./routes/upload");
 const settingsRoutes = require("./routes/settings");
 
@@ -28,6 +29,7 @@ app.use("/api/restaurants", restaurantRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/merchant", merchantRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/settings", settingsRoutes);
 

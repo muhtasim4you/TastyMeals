@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const auth = require("../middleware/auth");
-const admin = require("../middleware/admin");
+const adminOrMerchant = require("../middleware/adminOrMerchant");
 
 const router = express.Router();
 
@@ -29,7 +29,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter, limits: { fileSize: 5 * 1024 * 1024 } });
 
-router.post("/", auth, admin, upload.single("image"), (req, res) => {
+router.post("/", auth, adminOrMerchant, upload.single("image"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No file uploaded" });
   }

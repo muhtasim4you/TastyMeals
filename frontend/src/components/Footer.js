@@ -1,4 +1,5 @@
-import { FaUtensils } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { FaUtensils, FaStore } from "react-icons/fa";
 import "./Footer.css";
 
 const Footer = () => {
@@ -18,6 +19,9 @@ const Footer = () => {
             Our platform also helps restaurant owners manage their profits and track
             business performance effortlessly. Pay easily with Bkash, Nagad, or Bank Transfer.
           </p>
+          <Link to="/merchant/register" className="footer-partner-link">
+            <FaStore /> Own a restaurant? Partner with us
+          </Link>
         </div>
       </div>
       <div className="footer-bottom">

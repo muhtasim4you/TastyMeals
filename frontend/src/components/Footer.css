@@ -42,6 +42,20 @@
   font-size: 0.9rem;
 }
 
+.footer-partner-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  color: #f39c12;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.footer-partner-link:hover {
+  color: #e67e22;
+}
+
 .footer-bottom {
   border-top: 1px solid #3d4f5f;
   text-align: center;

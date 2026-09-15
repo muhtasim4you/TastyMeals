@@ -29,6 +29,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const registerMerchant = async (payload) => {
+    setLoading(true);
+    try {
+      const res = await axios.post("http://localhost:5000/api/merchant/register", payload);
+      setToken(res.data.token);
+      setUser(res.data.user);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      return { success: true };
+    } catch (error) {
+      return { success: false, message: error.response?.data?.message || "Registration failed" };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const login = async (email, password) => {
     setLoading(true);
     try {
@@ -53,7 +69,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, register, login, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, register, registerMerchant, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -19,6 +19,7 @@ const restaurantSchema = new mongoose.Schema(
     location: { type: String, required: true },
     image: { type: String, default: "" },
     description: { type: String, default: "" },
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
     menu: [menuItemSchema],
   },
   { timestamps: true }
