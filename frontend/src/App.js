@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import Wishlist from "./pages/Wishlist";
 import SearchResults from "./pages/SearchResults";
 import Deals from "./pages/Deals";
+import Notifications from "./pages/Notifications";
 import RestaurantDetail from "./pages/RestaurantDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -27,6 +28,7 @@ import ManageMenu from "./pages/admin/ManageMenu";
 import ManageOrders from "./pages/admin/ManageOrders";
 import ManageCharities from "./pages/admin/ManageCharities";
 import ManageDonations from "./pages/admin/ManageDonations";
+import ManageNotifications from "./pages/admin/ManageNotifications";
 import ManageSettings from "./pages/admin/ManageSettings";
 
 const App = () => {
@@ -43,6 +45,7 @@ const App = () => {
           <Route path="orders" element={<ManageOrders />} />
           <Route path="charities" element={<ManageCharities />} />
           <Route path="donations" element={<ManageDonations />} />
+          <Route path="notifications" element={<ManageNotifications />} />
           <Route path="settings" element={<ManageSettings />} />
         </Route>
 
@@ -68,6 +71,7 @@ const App = () => {
                 <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/search" element={<SearchResults />} />
                 <Route path="/deals" element={<Deals />} />
+                <Route path="/notifications" element={<Notifications />} />
                 <Route path="/restaurant/:id" element={<RestaurantDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />

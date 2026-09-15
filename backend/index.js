@@ -14,6 +14,7 @@ const merchantRoutes = require("./routes/merchant");
 const uploadRoutes = require("./routes/upload");
 const settingsRoutes = require("./routes/settings");
 const charityRoutes = require("./routes/charity");
+const notificationRoutes = require("./routes/notification");
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/api/merchant", merchantRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/charities", charityRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "TastyMeals API is running" });

@@ -1,0 +1,157 @@
+.notifications-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: calc(100vh - 200px);
+}
+
+.notifications-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.notifications-header-icon {
+  font-size: 2rem;
+  color: #e74c3c;
+  margin-bottom: 10px;
+}
+
+.notifications-header h1 {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.notifications-header p {
+  color: #888;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+}
+
+.mark-all-read-btn {
+  background: none;
+  border: 2px solid #e74c3c;
+  color: #e74c3c;
+  padding: 8px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: all 0.3s;
+}
+
+.mark-all-read-btn:hover {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.notifications-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.notifications-empty h3 {
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.notifications-empty p {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notification-card {
+  position: relative;
+  display: flex;
+  gap: 15px;
+  background: #fff;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.notification-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.notification-card.unread {
+  background: #fff9f5;
+  border-left: 3px solid #e74c3c;
+}
+
+.notification-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.notification-icon.initiative {
+  background: #27ae60;
+}
+
+.notification-icon.donation_impact {
+  background: #e67e22;
+}
+
+.notification-icon.deal {
+  background: #e74c3c;
+}
+
+.notification-body {
+  flex: 1;
+}
+
+.notification-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.notification-top h4 {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.notification-time {
+  color: #aaa;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.notification-body p {
+  color: #777;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.unread-dot {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e74c3c;
+}

@@ -7,6 +7,7 @@ const Order = require("../models/Order");
 const Settings = require("../models/Settings");
 const Charity = require("../models/Charity");
 const Donation = require("../models/Donation");
+const Notification = require("../models/Notification");
 
 const router = express.Router();
 
@@ -226,6 +227,14 @@ router.post("/charities", auth, admin, async (req, res) => {
     const { name, description, location, contactPhone, contactEmail, image } = req.body;
     const charity = new Charity({ name, description, location, contactPhone, contactEmail, image });
     await charity.save();
+
+    await Notification.create({
+      title: "New Charity Partner Onboard",
+      message: `TastyMeals has partnered with ${charity.name} to help redirect surplus food to those in need.`,
+      type: "initiative",
+      image: charity.image,
+    });
+
     res.status(201).json(charity);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -281,7 +290,46 @@ router.put("/donations/:id/status", auth, admin, async (req, res) => {
       .populate("restaurant", "name location")
       .populate("charity", "name location");
     if (!donation) return res.status(404).json({ message: "Donation not found" });
+
+    if (status === "picked_up") {
+      await Notification.create({
+        title: "Surplus Food Rescued",
+        message: `${donation.restaurant.name} donated ${donation.quantity} ${donation.unit} of ${donation.foodItem} to ${donation.charity.name}, reducing food waste in the community.`,
+        type: "donation_impact",
+      });
+    }
+
     res.json(donation);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ===== NOTIFICATION MANAGEMENT =====
+router.get("/notifications", auth, admin, async (req, res) => {
+  try {
+    const notifications = await Notification.find().sort({ createdAt: -1 });
+    res.json(notifications);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.post("/notifications", auth, admin, async (req, res) => {
+  try {
+    const { title, message, type, image } = req.body;
+    const notification = new Notification({ title, message, type: type || "initiative", image });
+    await notification.save();
+    res.status(201).json(notification);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.delete("/notifications/:id", auth, admin, async (req, res) => {
+  try {
+    await Notification.findByIdAndDelete(req.params.id);
+    res.json({ message: "Notification deleted" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
