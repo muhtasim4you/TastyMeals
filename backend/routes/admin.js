@@ -11,6 +11,7 @@ const Notification = require("../models/Notification");
 const WastageLog = require("../models/WastageLog");
 const JobPosting = require("../models/JobPosting");
 const JobApplication = require("../models/JobApplication");
+const Review = require("../models/Review");
 
 const router = express.Router();
 
@@ -380,6 +381,37 @@ router.delete("/jobs/:id", auth, admin, async (req, res) => {
     if (!job) return res.status(404).json({ message: "Job posting not found" });
     await JobApplication.deleteMany({ job: job._id });
     res.json({ message: "Job posting removed" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ===== REVIEW OVERSIGHT =====
+router.get("/reviews", auth, admin, async (req, res) => {
+  try {
+    const reviews = await Review.find()
+      .populate("user", "name email")
+      .populate("restaurant", "name location")
+      .sort({ createdAt: -1 });
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.delete("/reviews/:id", auth, admin, async (req, res) => {
+  try {
+    const review = await Review.findByIdAndDelete(req.params.id);
+    if (!review) return res.status(404).json({ message: "Review not found" });
+
+    const remaining = await Review.find({ restaurant: review.restaurant });
+    const avg =
+      remaining.length > 0
+        ? remaining.reduce((sum, r) => sum + r.restaurantRating, 0) / remaining.length
+        : 0;
+    await Restaurant.findByIdAndUpdate(review.restaurant, { rating: Math.round(avg * 10) / 10 });
+
+    res.json({ message: "Review removed" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

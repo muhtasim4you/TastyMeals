@@ -39,6 +39,7 @@ import ManageDonations from "./pages/admin/ManageDonations";
 import ManageNotifications from "./pages/admin/ManageNotifications";
 import ManageWastage from "./pages/admin/ManageWastage";
 import ManageJobs from "./pages/admin/ManageJobs";
+import ManageReviews from "./pages/admin/ManageReviews";
 import ManageSettings from "./pages/admin/ManageSettings";
 
 const App = () => {
@@ -58,6 +59,7 @@ const App = () => {
           <Route path="notifications" element={<ManageNotifications />} />
           <Route path="wastage" element={<ManageWastage />} />
           <Route path="jobs" element={<ManageJobs />} />
+          <Route path="reviews" element={<ManageReviews />} />
           <Route path="settings" element={<ManageSettings />} />
         </Route>
 

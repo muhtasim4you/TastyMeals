@@ -2,9 +2,21 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-import { FaHistory, FaChevronDown, FaChevronUp, FaBoxOpen, FaMobileAlt, FaUniversity, FaMapMarkerAlt } from "react-icons/fa";
+import { FaHistory, FaChevronDown, FaChevronUp, FaBoxOpen, FaMobileAlt, FaUniversity, FaMapMarkerAlt, FaStar, FaTimes, FaCheckCircle } from "react-icons/fa";
 import toast from "react-hot-toast";
 import "./OrderHistory.css";
+
+const StarInput = ({ value, onChange }) => (
+  <div className="star-input">
+    {[1, 2, 3, 4, 5].map((n) => (
+      <FaStar
+        key={n}
+        className={n <= value ? "star-input-filled" : "star-input-empty"}
+        onClick={() => onChange(n)}
+      />
+    ))}
+  </div>
+);
 
 const statusLabels = {
   pending: "Pending",
@@ -30,6 +42,10 @@ const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedOrder, setExpandedOrder] = useState(null);
+  const [reviewedOrderIds, setReviewedOrderIds] = useState(new Set());
+  const [reviewingOrder, setReviewingOrder] = useState(null);
+  const [reviewForm, setReviewForm] = useState({ restaurantRating: 0, restaurantComment: "", deliveryRating: 0, deliveryComment: "" });
+  const [submittingReview, setSubmittingReview] = useState(false);
 
   const API = "http://localhost:5000/api/orders";
 
@@ -39,7 +55,46 @@ const OrderHistory = () => {
       return;
     }
     fetchOrders();
+    fetchMyReviews();
   }, [user]);
+
+  const fetchMyReviews = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/reviews/my", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setReviewedOrderIds(new Set(res.data.map((r) => r.order)));
+    } catch (error) {
+      // non-critical
+    }
+  };
+
+  const openReviewModal = (order) => {
+    setReviewingOrder(order);
+    setReviewForm({ restaurantRating: 0, restaurantComment: "", deliveryRating: 0, deliveryComment: "" });
+  };
+
+  const submitReview = async () => {
+    if (!reviewForm.restaurantRating || !reviewForm.deliveryRating) {
+      toast.error("Please rate both the food and the delivery");
+      return;
+    }
+    setSubmittingReview(true);
+    try {
+      await axios.post(
+        "http://localhost:5000/api/reviews",
+        { orderId: reviewingOrder._id, ...reviewForm },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setReviewedOrderIds(new Set([...reviewedOrderIds, reviewingOrder._id]));
+      setReviewingOrder(null);
+      toast.success("Thanks for your review!");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to submit review");
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
 
   const fetchOrders = async () => {
     try {
@@ -131,6 +186,21 @@ const OrderHistory = () => {
                       <FaMapMarkerAlt /> Track
                     </button>
                   )}
+                  {order.status === "delivered" && (
+                    reviewedOrderIds.has(order._id) ? (
+                      <span className="reviewed-badge"><FaCheckCircle /> Reviewed</span>
+                    ) : (
+                      <button
+                        className="rate-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openReviewModal(order);
+                        }}
+                      >
+                        <FaStar /> Rate Order
+                      </button>
+                    )
+                  )}
                   <span className="order-total">৳{order.total.toFixed(2)}</span>
                   <span className="order-items-count">
                     {order.items.length} item{order.items.length !== 1 ? "s" : ""}
@@ -219,6 +289,49 @@ const OrderHistory = () => {
               )}
             </div>
           ))}
+        </div>
+      )}
+
+      {reviewingOrder && (
+        <div className="modal-overlay" onClick={() => setReviewingOrder(null)}>
+          <div className="review-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setReviewingOrder(null)}>
+              <FaTimes />
+            </button>
+            <h3>Rate Order #{reviewingOrder._id.slice(-8).toUpperCase()}</h3>
+
+            <div className="review-modal-section">
+              <label>Food & Restaurant Quality</label>
+              <StarInput
+                value={reviewForm.restaurantRating}
+                onChange={(n) => setReviewForm({ ...reviewForm, restaurantRating: n })}
+              />
+              <textarea
+                placeholder="How was the food? (optional)"
+                value={reviewForm.restaurantComment}
+                onChange={(e) => setReviewForm({ ...reviewForm, restaurantComment: e.target.value })}
+                rows={2}
+              />
+            </div>
+
+            <div className="review-modal-section">
+              <label>Delivery Experience</label>
+              <StarInput
+                value={reviewForm.deliveryRating}
+                onChange={(n) => setReviewForm({ ...reviewForm, deliveryRating: n })}
+              />
+              <textarea
+                placeholder="How was the delivery? (optional)"
+                value={reviewForm.deliveryComment}
+                onChange={(e) => setReviewForm({ ...reviewForm, deliveryComment: e.target.value })}
+                rows={2}
+              />
+            </div>
+
+            <button className="submit-review-btn" onClick={submitReview} disabled={submittingReview}>
+              {submittingReview ? "Submitting..." : "Submit Review"}
+            </button>
+          </div>
         </div>
       )}
     </div>

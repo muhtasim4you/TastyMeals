@@ -14,6 +14,7 @@ import {
   FaBell,
   FaChartBar,
   FaBriefcase,
+  FaStar,
 } from "react-icons/fa";
 import "./Admin.css";
 
@@ -71,6 +72,9 @@ const AdminLayout = () => {
           </Link>
           <Link to="/admin/jobs" className={`admin-nav-item ${isActive("/admin/jobs") ? "active" : ""}`}>
             <FaBriefcase /> Jobs
+          </Link>
+          <Link to="/admin/reviews" className={`admin-nav-item ${isActive("/admin/reviews") ? "active" : ""}`}>
+            <FaStar /> Reviews
           </Link>
           <Link to="/admin/settings" className={`admin-nav-item ${isActive("/admin/settings") ? "active" : ""}`}>
             <FaCog /> Settings

@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { FaStar, FaMapMarkerAlt, FaHeart, FaRegHeart, FaShoppingCart, FaTimes, FaPlus, FaMinus, FaLeaf } from "react-icons/fa";
+import { FaStar, FaRegStar, FaMapMarkerAlt, FaHeart, FaRegHeart, FaShoppingCart, FaTimes, FaPlus, FaMinus, FaLeaf, FaTruck, FaCommentDots } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import { WishlistContext } from "../context/WishlistContext";
 import { CartContext } from "../context/CartContext";
@@ -29,6 +29,7 @@ const RestaurantDetail = () => {
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [reviews, setReviews] = useState([]);
   const [activeCategory, setActiveCategory] = useState("All");
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -44,6 +45,7 @@ const RestaurantDetail = () => {
 
   useEffect(() => {
     fetchRestaurant();
+    fetchReviews();
   }, [id]);
 
   const fetchRestaurant = async () => {
@@ -54,6 +56,15 @@ const RestaurantDetail = () => {
       toast.error("Failed to load restaurant");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchReviews = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/reviews/restaurant/${id}`);
+      setReviews(res.data);
+    } catch (error) {
+      // reviews are supplementary; fail silently
     }
   };
 
@@ -235,6 +246,40 @@ const RestaurantDetail = () => {
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="detail-reviews">
+        <h2><FaCommentDots /> Reviews ({reviews.length})</h2>
+        {reviews.length === 0 ? (
+          <p className="reviews-empty">No reviews yet. Be the first to review after your order is delivered!</p>
+        ) : (
+          <div className="reviews-list">
+            {reviews.map((r) => (
+              <div key={r._id} className="review-card">
+                <div className="review-card-header">
+                  <span className="review-author">{r.user?.name || "Anonymous"}</span>
+                  <span className="review-date">{new Date(r.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div className="review-rating-row">
+                  <span className="review-rating-label">
+                    <FaStar /> Food:
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      n <= r.restaurantRating ? <FaStar key={n} className="review-star-filled" /> : <FaRegStar key={n} className="review-star-empty" />
+                    ))}
+                  </span>
+                  <span className="review-rating-label">
+                    <FaTruck /> Delivery:
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      n <= r.deliveryRating ? <FaStar key={n} className="review-star-filled" /> : <FaRegStar key={n} className="review-star-empty" />
+                    ))}
+                  </span>
+                </div>
+                {r.restaurantComment && <p className="review-comment">{r.restaurantComment}</p>}
+                {r.deliveryComment && <p className="review-comment review-comment-delivery">Delivery: {r.deliveryComment}</p>}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {showModal && selectedItem && (

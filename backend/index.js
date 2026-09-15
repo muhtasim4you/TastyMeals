@@ -18,6 +18,7 @@ const notificationRoutes = require("./routes/notification");
 const rewardRoutes = require("./routes/reward");
 const jobRoutes = require("./routes/job");
 const dietPlanRoutes = require("./routes/dietplan");
+const reviewRoutes = require("./routes/review");
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/rewards", rewardRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/dietplan", dietPlanRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "TastyMeals API is running" });

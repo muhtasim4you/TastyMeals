@@ -706,6 +706,11 @@
   font-size: 0.75rem;
 }
 
+.star-sm-empty {
+  color: #ddd;
+  font-size: 0.75rem;
+}
+
 .status-badge {
   padding: 4px 12px;
   border-radius: 15px;

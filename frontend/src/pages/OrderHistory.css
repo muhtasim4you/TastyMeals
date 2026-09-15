@@ -154,6 +154,144 @@
   background-color: #2980b9;
 }
 
+.rate-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  background: #f39c12;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.rate-btn:hover {
+  background-color: #e08e0b;
+}
+
+.reviewed-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #27ae60;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.review-modal {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px;
+  width: 100%;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.review-modal h3 {
+  color: #333;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  padding-right: 20px;
+}
+
+.review-modal .modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #999;
+  cursor: pointer;
+}
+
+.review-modal-section {
+  margin-bottom: 20px;
+}
+
+.review-modal-section label {
+  display: block;
+  font-weight: 600;
+  color: #555;
+  font-size: 0.88rem;
+  margin-bottom: 8px;
+}
+
+.review-modal-section textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.88rem;
+  outline: none;
+  resize: vertical;
+}
+
+.review-modal-section textarea:focus {
+  border-color: #f39c12;
+}
+
+.star-input {
+  display: flex;
+  gap: 6px;
+  font-size: 1.5rem;
+}
+
+.star-input-filled {
+  color: #f39c12;
+  cursor: pointer;
+}
+
+.star-input-empty {
+  color: #ddd;
+  cursor: pointer;
+}
+
+.submit-review-btn {
+  width: 100%;
+  padding: 13px;
+  background-color: #f39c12;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  transition: background-color 0.3s;
+}
+
+.submit-review-btn:hover {
+  background-color: #e08e0b;
+}
+
+.submit-review-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .order-total {
   font-size: 1.1rem;
   font-weight: 700;
