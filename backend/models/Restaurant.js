@@ -7,6 +7,8 @@ const menuItemSchema = new mongoose.Schema({
   image: { type: String, default: "" },
   category: { type: String, default: "Main" },
   rating: { type: Number, default: 0 },
+  discountPercentage: { type: Number, default: 0 },
+  expiryDate: { type: Date, default: null },
 });
 
 const restaurantSchema = new mongoose.Schema(

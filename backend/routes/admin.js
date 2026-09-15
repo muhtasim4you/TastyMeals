@@ -97,8 +97,17 @@ router.post("/restaurants/:id/menu", auth, admin, async (req, res) => {
     const restaurant = await Restaurant.findById(req.params.id);
     if (!restaurant) return res.status(404).json({ message: "Restaurant not found" });
 
-    const { name, description, price, image, category, rating } = req.body;
-    restaurant.menu.push({ name, description, price, image, category, rating: rating || 0 });
+    const { name, description, price, image, category, rating, discountPercentage, expiryDate } = req.body;
+    restaurant.menu.push({
+      name,
+      description,
+      price,
+      image,
+      category,
+      rating: rating || 0,
+      discountPercentage: discountPercentage || 0,
+      expiryDate: expiryDate || null,
+    });
     await restaurant.save();
     res.json(restaurant);
   } catch (error) {
@@ -114,13 +123,15 @@ router.put("/restaurants/:id/menu/:itemId", auth, admin, async (req, res) => {
     const item = restaurant.menu.id(req.params.itemId);
     if (!item) return res.status(404).json({ message: "Menu item not found" });
 
-    const { name, description, price, image, category, rating } = req.body;
+    const { name, description, price, image, category, rating, discountPercentage, expiryDate } = req.body;
     if (name !== undefined) item.name = name;
     if (description !== undefined) item.description = description;
     if (price !== undefined) item.price = price;
     if (image !== undefined) item.image = image;
     if (category !== undefined) item.category = category;
     if (rating !== undefined) item.rating = rating;
+    if (discountPercentage !== undefined) item.discountPercentage = discountPercentage;
+    if (expiryDate !== undefined) item.expiryDate = expiryDate || null;
 
     await restaurant.save();
     res.json(restaurant);

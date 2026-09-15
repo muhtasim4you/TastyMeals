@@ -664,6 +664,17 @@
   color: #666;
 }
 
+.deal-badge-active {
+  background: #fff2e0;
+  color: #e67e22;
+  white-space: nowrap;
+}
+
+.deal-badge-expired {
+  background: #f0f0f0;
+  color: #aaa;
+}
+
 .star-sm {
   color: #f39c12;
   font-size: 0.75rem;

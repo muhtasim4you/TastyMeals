@@ -18,6 +18,7 @@ const ManageMenu = () => {
   const [uploading, setUploading] = useState(false);
   const [form, setForm] = useState({
     name: "", description: "", price: "", image: "", category: "Main", rating: "",
+    discountPercentage: "", expiryDate: "",
   });
 
   const API = `http://localhost:5000/api/admin/restaurants/${id}`;
@@ -36,17 +37,29 @@ const ManageMenu = () => {
   };
 
   const resetForm = () => {
-    setForm({ name: "", description: "", price: "", image: "", category: "Main", rating: "" });
+    setForm({
+      name: "", description: "", price: "", image: "", category: "Main", rating: "",
+      discountPercentage: "", expiryDate: "",
+    });
     setImageFile(null);
     setImagePreview("");
     setEditing(null);
     setShowForm(false);
   };
 
+  const toDatetimeLocal = (isoDate) => {
+    if (!isoDate) return "";
+    const d = new Date(isoDate);
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
+
   const openEdit = (item) => {
     setForm({
       name: item.name, description: item.description, price: item.price,
       image: item.image, category: item.category, rating: item.rating,
+      discountPercentage: item.discountPercentage || "",
+      expiryDate: toDatetimeLocal(item.expiryDate),
     });
     setImageFile(null);
     setImagePreview(item.image || "");
@@ -83,7 +96,14 @@ const ManageMenu = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const imageUrl = await uploadImage();
-    const data = { ...form, image: imageUrl, price: parseFloat(form.price), rating: parseFloat(form.rating) || 0 };
+    const data = {
+      ...form,
+      image: imageUrl,
+      price: parseFloat(form.price),
+      rating: parseFloat(form.rating) || 0,
+      discountPercentage: parseFloat(form.discountPercentage) || 0,
+      expiryDate: form.expiryDate ? new Date(form.expiryDate).toISOString() : null,
+    };
     try {
       if (editing) {
         const res = await axios.put(`${API}/menu/${editing}`, data, {
@@ -163,6 +183,16 @@ const ManageMenu = () => {
                 <input type="number" step="0.1" min="0" max="5" value={form.rating} onChange={(e) => setForm({ ...form, rating: e.target.value })} />
               </div>
             </div>
+            <div className="admin-form-row">
+              <div className="admin-form-group">
+                <label>Discount (%)</label>
+                <input type="number" step="1" min="0" max="90" placeholder="0" value={form.discountPercentage} onChange={(e) => setForm({ ...form, discountPercentage: e.target.value })} />
+              </div>
+              <div className="admin-form-group">
+                <label>Expires At (for nearing-expiry deals)</label>
+                <input type="datetime-local" value={form.expiryDate} onChange={(e) => setForm({ ...form, expiryDate: e.target.value })} />
+              </div>
+            </div>
             <div className="admin-form-group">
               <label>Image</label>
               <div className="image-upload-area">
@@ -201,6 +231,7 @@ const ManageMenu = () => {
               <th>Category</th>
               <th>Price</th>
               <th>Rating</th>
+              <th>Deal</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -222,6 +253,15 @@ const ManageMenu = () => {
                 <td><span className="cat-badge">{item.category}</span></td>
                 <td className="table-price">৳{item.price.toFixed(2)}</td>
                 <td><FaStar className="star-sm" /> {item.rating}</td>
+                <td>
+                  {item.discountPercentage > 0 && item.expiryDate ? (
+                    <span className={`cat-badge ${new Date(item.expiryDate) > new Date() ? "deal-badge-active" : "deal-badge-expired"}`}>
+                      {item.discountPercentage}% off · {new Date(item.expiryDate) > new Date() ? `exp. ${new Date(item.expiryDate).toLocaleString()}` : "expired"}
+                    </span>
+                  ) : (
+                    <span className="table-muted">-</span>
+                  )}
+                </td>
                 <td>
                   <div className="table-actions">
                     <button className="admin-icon-btn edit" onClick={() => openEdit(item)}><FaEdit /></button>

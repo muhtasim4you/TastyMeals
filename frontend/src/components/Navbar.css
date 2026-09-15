@@ -76,6 +76,17 @@
   color: #e74c3c;
 }
 
+.navbar-deals-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #e67e22 !important;
+}
+
+.navbar-deals-link:hover {
+  color: #d35400 !important;
+}
+
 .navbar-right {
   display: flex;
   align-items: center;

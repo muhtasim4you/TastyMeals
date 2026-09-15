@@ -97,6 +97,24 @@ const restaurants = [
   },
 ];
 
+const hoursFromNow = (h) => new Date(Date.now() + h * 60 * 60 * 1000);
+
+const applyDeals = (restaurants) => {
+  restaurants[0].menu[2].discountPercentage = 30;
+  restaurants[0].menu[2].expiryDate = hoursFromNow(3);
+
+  restaurants[1].menu[3].discountPercentage = 40;
+  restaurants[1].menu[3].expiryDate = hoursFromNow(6);
+
+  restaurants[2].menu[1].discountPercentage = 25;
+  restaurants[2].menu[1].expiryDate = hoursFromNow(20);
+
+  restaurants[4].menu[2].discountPercentage = 50;
+  restaurants[4].menu[2].expiryDate = hoursFromNow(1);
+
+  return restaurants;
+};
+
 const seedDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
@@ -105,7 +123,7 @@ const seedDB = async () => {
     await Restaurant.deleteMany({});
     console.log("Cleared existing restaurants");
 
-    await Restaurant.insertMany(restaurants);
+    await Restaurant.insertMany(applyDeals(restaurants));
     console.log("Seeded 6 restaurants with menu items");
 
     const existingAdmin = await User.findOne({ email: "admin@tastymeals.com" });

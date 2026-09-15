@@ -58,6 +58,49 @@ router.get("/search", async (req, res) => {
   }
 });
 
+router.get("/discounted", async (req, res) => {
+  try {
+    const now = new Date();
+
+    const restaurants = await Restaurant.find({
+      menu: {
+        $elemMatch: {
+          discountPercentage: { $gt: 0 },
+          expiryDate: { $gt: now },
+        },
+      },
+    });
+
+    const items = [];
+    restaurants.forEach((restaurant) => {
+      restaurant.menu.forEach((item) => {
+        if (item.discountPercentage > 0 && item.expiryDate && item.expiryDate > now) {
+          items.push({
+            _id: item._id,
+            name: item.name,
+            description: item.description,
+            price: item.price,
+            discountedPrice: Math.round(item.price * (1 - item.discountPercentage / 100) * 100) / 100,
+            discountPercentage: item.discountPercentage,
+            expiryDate: item.expiryDate,
+            image: item.image,
+            category: item.category,
+            rating: item.rating,
+            restaurant: restaurant.name,
+            restaurantId: restaurant._id,
+          });
+        }
+      });
+    });
+
+    items.sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate));
+
+    res.json(items);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const restaurant = await Restaurant.findById(req.params.id);

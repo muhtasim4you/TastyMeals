@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Wishlist from "./pages/Wishlist";
 import SearchResults from "./pages/SearchResults";
+import Deals from "./pages/Deals";
 import RestaurantDetail from "./pages/RestaurantDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -49,6 +50,7 @@ const App = () => {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/search" element={<SearchResults />} />
+                <Route path="/deals" element={<Deals />} />
                 <Route path="/restaurant/:id" element={<RestaurantDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />

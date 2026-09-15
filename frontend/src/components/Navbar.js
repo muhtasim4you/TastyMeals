@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
-import { FaUtensils, FaSearch, FaShoppingCart } from "react-icons/fa";
+import { FaUtensils, FaSearch, FaShoppingCart, FaFire } from "react-icons/fa";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -43,6 +43,11 @@ const Navbar = () => {
 
       <ul className="navbar-center">
         <li><Link to="/">Home</Link></li>
+        <li>
+          <Link to="/deals" className="navbar-deals-link">
+            <FaFire /> Deals
+          </Link>
+        </li>
         {user && (
           <>
             <li><Link to="/wishlist">Wishlist</Link></li>
