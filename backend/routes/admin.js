@@ -9,6 +9,8 @@ const Charity = require("../models/Charity");
 const Donation = require("../models/Donation");
 const Notification = require("../models/Notification");
 const WastageLog = require("../models/WastageLog");
+const JobPosting = require("../models/JobPosting");
+const JobApplication = require("../models/JobApplication");
 
 const router = express.Router();
 
@@ -343,6 +345,33 @@ router.get("/wastage", auth, admin, async (req, res) => {
       .populate("restaurant", "name location")
       .sort({ date: -1 });
     res.json(logs);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ===== JOB POSTING OVERSIGHT =====
+router.get("/jobs", auth, admin, async (req, res) => {
+  try {
+    const jobs = await JobPosting.find().populate("restaurant", "name location").sort({ createdAt: -1 });
+    const counts = await JobApplication.aggregate([
+      { $group: { _id: "$job", count: { $sum: 1 } } },
+    ]);
+    const countMap = {};
+    counts.forEach((c) => { countMap[c._id.toString()] = c.count; });
+
+    res.json(jobs.map((j) => ({ ...j.toObject(), applicantCount: countMap[j._id.toString()] || 0 })));
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.delete("/jobs/:id", auth, admin, async (req, res) => {
+  try {
+    const job = await JobPosting.findByIdAndDelete(req.params.id);
+    if (!job) return res.status(404).json({ message: "Job posting not found" });
+    await JobApplication.deleteMany({ job: job._id });
+    res.json({ message: "Job posting removed" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

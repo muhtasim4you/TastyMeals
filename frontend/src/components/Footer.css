@@ -43,17 +43,26 @@
 }
 
 .footer-partner-link {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 8px;
   margin-top: 14px;
   color: #f39c12;
   font-weight: 600;
   font-size: 0.9rem;
+  width: fit-content;
 }
 
 .footer-partner-link:hover {
   color: #e67e22;
+}
+
+.footer-jobs-link {
+  color: #5dade2;
+}
+
+.footer-jobs-link:hover {
+  color: #3498db;
 }
 
 .footer-bottom {

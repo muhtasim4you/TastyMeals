@@ -87,6 +87,17 @@
   color: #d35400 !important;
 }
 
+.navbar-jobs-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #3498db !important;
+}
+
+.navbar-jobs-link:hover {
+  color: #2980b9 !important;
+}
+
 .navbar-right {
   display: flex;
   align-items: center;

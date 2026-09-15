@@ -1,0 +1,75 @@
+.job-apply-card {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.job-apply-summary {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  margin-bottom: 20px;
+}
+
+.job-apply-summary h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.job-apply-summary h2 svg {
+  color: #e74c3c;
+}
+
+.job-apply-form {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.job-apply-form h3 {
+  color: #333;
+  font-size: 1.05rem;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.job-apply-success {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  background: #fff;
+  border-radius: 16px;
+  padding: 50px 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.job-apply-success-icon {
+  font-size: 2.5rem;
+  color: #27ae60;
+  margin-bottom: 15px;
+}
+
+.job-apply-success h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.job-apply-success p {
+  color: #888;
+  margin-bottom: 25px;
+}

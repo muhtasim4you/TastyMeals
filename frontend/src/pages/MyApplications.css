@@ -1,0 +1,36 @@
+.applications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.application-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  background: #fff;
+  padding: 18px 22px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.application-info h4 {
+  color: #333;
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.application-date {
+  color: #aaa;
+  font-size: 0.8rem;
+}
+
+.status-badge {
+  padding: 5px 14px;
+  border-radius: 15px;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}

@@ -7,6 +7,8 @@ const User = require("../models/User");
 const Restaurant = require("../models/Restaurant");
 const Donation = require("../models/Donation");
 const WastageLog = require("../models/WastageLog");
+const JobPosting = require("../models/JobPosting");
+const JobApplication = require("../models/JobApplication");
 
 const router = express.Router();
 
@@ -303,6 +305,127 @@ router.delete("/wastage/:id", auth, merchant, async (req, res) => {
     const log = await WastageLog.findOneAndDelete({ _id: req.params.id, restaurant: restaurant._id });
     if (!log) return res.status(404).json({ message: "Wastage log not found" });
     res.json({ message: "Wastage log deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.get("/jobs", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const jobs = await JobPosting.find({ restaurant: restaurant._id }).sort({ createdAt: -1 });
+    const jobIds = jobs.map((j) => j._id);
+    const counts = await JobApplication.aggregate([
+      { $match: { job: { $in: jobIds } } },
+      { $group: { _id: "$job", count: { $sum: 1 } } },
+    ]);
+    const countMap = {};
+    counts.forEach((c) => { countMap[c._id.toString()] = c.count; });
+
+    res.json(jobs.map((j) => ({ ...j.toObject(), applicantCount: countMap[j._id.toString()] || 0 })));
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.post("/jobs", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const { title, description, location, employmentType, salaryRange } = req.body;
+    if (!title || !description || !location) {
+      return res.status(400).json({ message: "Title, description, and location are required" });
+    }
+
+    const job = new JobPosting({
+      restaurant: restaurant._id,
+      title,
+      description,
+      location,
+      employmentType: employmentType || "full_time",
+      salaryRange: salaryRange || "",
+    });
+    await job.save();
+    res.status(201).json(job);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/jobs/:id", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const job = await JobPosting.findOne({ _id: req.params.id, restaurant: restaurant._id });
+    if (!job) return res.status(404).json({ message: "Job posting not found" });
+
+    const { title, description, location, employmentType, salaryRange, status } = req.body;
+    if (title !== undefined) job.title = title;
+    if (description !== undefined) job.description = description;
+    if (location !== undefined) job.location = location;
+    if (employmentType !== undefined) job.employmentType = employmentType;
+    if (salaryRange !== undefined) job.salaryRange = salaryRange;
+    if (status !== undefined) job.status = status;
+
+    await job.save();
+    res.json(job);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.delete("/jobs/:id", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const job = await JobPosting.findOneAndDelete({ _id: req.params.id, restaurant: restaurant._id });
+    if (!job) return res.status(404).json({ message: "Job posting not found" });
+    await JobApplication.deleteMany({ job: job._id });
+    res.json({ message: "Job posting deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.get("/jobs/:id/applications", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const job = await JobPosting.findOne({ _id: req.params.id, restaurant: restaurant._id });
+    if (!job) return res.status(404).json({ message: "Job posting not found" });
+
+    const applications = await JobApplication.find({ job: job._id }).sort({ createdAt: -1 });
+    res.json({ job, applications });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/applications/:id/status", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const validStatuses = ["submitted", "reviewed", "shortlisted", "rejected", "hired"];
+    const { status } = req.body;
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+
+    const application = await JobApplication.findById(req.params.id).populate("job");
+    if (!application || application.job.restaurant.toString() !== restaurant._id.toString()) {
+      return res.status(404).json({ message: "Application not found" });
+    }
+
+    application.status = status;
+    await application.save();
+    res.json(application);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

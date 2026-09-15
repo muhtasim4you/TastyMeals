@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaUtensils, FaStore } from "react-icons/fa";
+import { FaUtensils, FaStore, FaBriefcase } from "react-icons/fa";
 import "./Footer.css";
 
 const Footer = () => {
@@ -21,6 +21,9 @@ const Footer = () => {
           </p>
           <Link to="/merchant/register" className="footer-partner-link">
             <FaStore /> Own a restaurant? Partner with us
+          </Link>
+          <Link to="/jobs" className="footer-partner-link footer-jobs-link">
+            <FaBriefcase /> We're hiring — see open positions
           </Link>
         </div>
       </div>

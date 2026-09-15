@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { FaUtensils, FaStore, FaClipboardList, FaHandHoldingHeart, FaChartBar, FaSignOutAlt } from "react-icons/fa";
+import { FaUtensils, FaStore, FaClipboardList, FaHandHoldingHeart, FaChartBar, FaBriefcase, FaSignOutAlt } from "react-icons/fa";
 import "../admin/Admin.css";
 
 const MerchantLayout = () => {
@@ -43,6 +43,9 @@ const MerchantLayout = () => {
           </Link>
           <Link to="/merchant/wastage" className={`admin-nav-item ${isActive("/merchant/wastage") ? "active" : ""}`}>
             <FaChartBar /> Wastage & Analytics
+          </Link>
+          <Link to="/merchant/jobs" className={`admin-nav-item ${location.pathname.startsWith("/merchant/jobs") ? "active" : ""}`}>
+            <FaBriefcase /> Job Postings
           </Link>
         </nav>
         <div className="admin-sidebar-footer">

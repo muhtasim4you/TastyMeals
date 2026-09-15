@@ -11,6 +11,9 @@ import SearchResults from "./pages/SearchResults";
 import Deals from "./pages/Deals";
 import Notifications from "./pages/Notifications";
 import Rewards from "./pages/Rewards";
+import Jobs from "./pages/Jobs";
+import JobApply from "./pages/JobApply";
+import MyApplications from "./pages/MyApplications";
 import RestaurantDetail from "./pages/RestaurantDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -23,6 +26,8 @@ import MerchantDashboard from "./pages/merchant/MerchantDashboard";
 import MerchantMenu from "./pages/merchant/MerchantMenu";
 import MerchantDonations from "./pages/merchant/MerchantDonations";
 import MerchantWastage from "./pages/merchant/MerchantWastage";
+import MerchantJobs from "./pages/merchant/MerchantJobs";
+import MerchantApplications from "./pages/merchant/MerchantApplications";
 import Dashboard from "./pages/admin/Dashboard";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageRestaurants from "./pages/admin/ManageRestaurants";
@@ -32,6 +37,7 @@ import ManageCharities from "./pages/admin/ManageCharities";
 import ManageDonations from "./pages/admin/ManageDonations";
 import ManageNotifications from "./pages/admin/ManageNotifications";
 import ManageWastage from "./pages/admin/ManageWastage";
+import ManageJobs from "./pages/admin/ManageJobs";
 import ManageSettings from "./pages/admin/ManageSettings";
 
 const App = () => {
@@ -50,6 +56,7 @@ const App = () => {
           <Route path="donations" element={<ManageDonations />} />
           <Route path="notifications" element={<ManageNotifications />} />
           <Route path="wastage" element={<ManageWastage />} />
+          <Route path="jobs" element={<ManageJobs />} />
           <Route path="settings" element={<ManageSettings />} />
         </Route>
 
@@ -60,6 +67,8 @@ const App = () => {
           <Route path="menu" element={<MerchantMenu />} />
           <Route path="donations" element={<MerchantDonations />} />
           <Route path="wastage" element={<MerchantWastage />} />
+          <Route path="jobs" element={<MerchantJobs />} />
+          <Route path="jobs/:id/applications" element={<MerchantApplications />} />
         </Route>
 
         {/* User Routes — with Navbar/Footer */}
@@ -78,6 +87,9 @@ const App = () => {
                 <Route path="/deals" element={<Deals />} />
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/rewards" element={<Rewards />} />
+                <Route path="/jobs" element={<Jobs />} />
+                <Route path="/jobs/:id/apply" element={<JobApply />} />
+                <Route path="/my-applications" element={<MyApplications />} />
                 <Route path="/restaurant/:id" element={<RestaurantDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
