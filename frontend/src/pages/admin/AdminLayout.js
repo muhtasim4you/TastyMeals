@@ -9,6 +9,8 @@ import {
   FaClipboardList,
   FaCog,
   FaSignOutAlt,
+  FaHandHoldingHeart,
+  FaGift,
 } from "react-icons/fa";
 import "./Admin.css";
 
@@ -51,6 +53,12 @@ const AdminLayout = () => {
           </Link>
           <Link to="/admin/orders" className={`admin-nav-item ${isActive("/admin/orders") ? "active" : ""}`}>
             <FaClipboardList /> Orders
+          </Link>
+          <Link to="/admin/charities" className={`admin-nav-item ${isActive("/admin/charities") ? "active" : ""}`}>
+            <FaHandHoldingHeart /> Charities
+          </Link>
+          <Link to="/admin/donations" className={`admin-nav-item ${isActive("/admin/donations") ? "active" : ""}`}>
+            <FaGift /> Donations
           </Link>
           <Link to="/admin/settings" className={`admin-nav-item ${isActive("/admin/settings") ? "active" : ""}`}>
             <FaCog /> Settings

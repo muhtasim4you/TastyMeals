@@ -5,6 +5,8 @@ const User = require("../models/User");
 const Restaurant = require("../models/Restaurant");
 const Order = require("../models/Order");
 const Settings = require("../models/Settings");
+const Charity = require("../models/Charity");
+const Donation = require("../models/Donation");
 
 const router = express.Router();
 
@@ -204,6 +206,82 @@ router.put("/orders/:id/status", auth, admin, async (req, res) => {
     await order.save();
     const populated = await Order.findById(order._id).populate("user", "name email");
     res.json(populated);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ===== CHARITY PARTNER MANAGEMENT =====
+router.get("/charities", auth, admin, async (req, res) => {
+  try {
+    const charities = await Charity.find().sort({ createdAt: -1 });
+    res.json(charities);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.post("/charities", auth, admin, async (req, res) => {
+  try {
+    const { name, description, location, contactPhone, contactEmail, image } = req.body;
+    const charity = new Charity({ name, description, location, contactPhone, contactEmail, image });
+    await charity.save();
+    res.status(201).json(charity);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/charities/:id", auth, admin, async (req, res) => {
+  try {
+    const { name, description, location, contactPhone, contactEmail, image } = req.body;
+    const charity = await Charity.findByIdAndUpdate(
+      req.params.id,
+      { name, description, location, contactPhone, contactEmail, image },
+      { new: true }
+    );
+    if (!charity) return res.status(404).json({ message: "Charity not found" });
+    res.json(charity);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.delete("/charities/:id", auth, admin, async (req, res) => {
+  try {
+    await Charity.findByIdAndDelete(req.params.id);
+    res.json({ message: "Charity deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ===== DONATION MANAGEMENT =====
+router.get("/donations", auth, admin, async (req, res) => {
+  try {
+    const donations = await Donation.find()
+      .populate("restaurant", "name location")
+      .populate("charity", "name location")
+      .sort({ createdAt: -1 });
+    res.json(donations);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/donations/:id/status", auth, admin, async (req, res) => {
+  try {
+    const { status } = req.body;
+    const validStatuses = ["pending", "accepted", "picked_up", "cancelled"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+
+    const donation = await Donation.findByIdAndUpdate(req.params.id, { status }, { new: true })
+      .populate("restaurant", "name location")
+      .populate("charity", "name location");
+    if (!donation) return res.status(404).json({ message: "Donation not found" });
+    res.json(donation);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

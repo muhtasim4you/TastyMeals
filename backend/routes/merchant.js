@@ -5,6 +5,7 @@ const auth = require("../middleware/auth");
 const merchant = require("../middleware/merchant");
 const User = require("../models/User");
 const Restaurant = require("../models/Restaurant");
+const Donation = require("../models/Donation");
 
 const router = express.Router();
 
@@ -139,6 +140,66 @@ router.delete("/restaurant/menu/:itemId", auth, merchant, async (req, res) => {
     restaurant.menu = restaurant.menu.filter((item) => item._id.toString() !== req.params.itemId);
     await restaurant.save();
     res.json(restaurant);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.get("/donations", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const donations = await Donation.find({ restaurant: restaurant._id })
+      .populate("charity", "name location")
+      .sort({ createdAt: -1 });
+    res.json(donations);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.post("/donations", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const { charityId, foodItem, quantity, unit, notes } = req.body;
+    if (!charityId || !foodItem || !quantity) {
+      return res.status(400).json({ message: "Charity, food item, and quantity are required" });
+    }
+
+    const donation = new Donation({
+      restaurant: restaurant._id,
+      charity: charityId,
+      foodItem,
+      quantity,
+      unit: unit || "portions",
+      notes: notes || "",
+    });
+    await donation.save();
+    const populated = await Donation.findById(donation._id).populate("charity", "name location");
+    res.status(201).json(populated);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/donations/:id/cancel", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const donation = await Donation.findOne({ _id: req.params.id, restaurant: restaurant._id });
+    if (!donation) return res.status(404).json({ message: "Donation not found" });
+    if (donation.status !== "pending") {
+      return res.status(400).json({ message: "Only pending donations can be cancelled" });
+    }
+
+    donation.status = "cancelled";
+    await donation.save();
+    const populated = await Donation.findById(donation._id).populate("charity", "name location");
+    res.json(populated);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

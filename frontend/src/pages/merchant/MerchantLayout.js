@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { FaUtensils, FaStore, FaClipboardList, FaSignOutAlt } from "react-icons/fa";
+import { FaUtensils, FaStore, FaClipboardList, FaHandHoldingHeart, FaSignOutAlt } from "react-icons/fa";
 import "../admin/Admin.css";
 
 const MerchantLayout = () => {
@@ -37,6 +37,9 @@ const MerchantLayout = () => {
           </Link>
           <Link to="/merchant/menu" className={`admin-nav-item ${isActive("/merchant/menu") ? "active" : ""}`}>
             <FaClipboardList /> Menu
+          </Link>
+          <Link to="/merchant/donations" className={`admin-nav-item ${isActive("/merchant/donations") ? "active" : ""}`}>
+            <FaHandHoldingHeart /> Donate Surplus
           </Link>
         </nav>
         <div className="admin-sidebar-footer">
