@@ -6,6 +6,7 @@ const merchant = require("../middleware/merchant");
 const User = require("../models/User");
 const Restaurant = require("../models/Restaurant");
 const Donation = require("../models/Donation");
+const WastageLog = require("../models/WastageLog");
 
 const router = express.Router();
 
@@ -200,6 +201,108 @@ router.put("/donations/:id/cancel", auth, merchant, async (req, res) => {
     await donation.save();
     const populated = await Donation.findById(donation._id).populate("charity", "name location");
     res.json(populated);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+const WASTAGE_REASONS = ["unsold", "spoiled", "overproduction", "quality_issue", "other"];
+
+router.get("/wastage/analytics", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const logs = await WastageLog.find({ restaurant: restaurant._id });
+    const donations = await Donation.find({ restaurant: restaurant._id, status: "picked_up" });
+
+    const totalQuantity = logs.reduce((sum, l) => sum + l.quantity, 0);
+    const totalValue = logs.reduce((sum, l) => sum + l.estimatedValue, 0);
+
+    const byReason = WASTAGE_REASONS.map((reason) => {
+      const matching = logs.filter((l) => l.reason === reason);
+      return {
+        reason,
+        quantity: matching.reduce((sum, l) => sum + l.quantity, 0),
+        value: matching.reduce((sum, l) => sum + l.estimatedValue, 0),
+      };
+    });
+
+    const itemTotals = {};
+    logs.forEach((l) => {
+      if (!itemTotals[l.itemName]) itemTotals[l.itemName] = { itemName: l.itemName, quantity: 0, value: 0 };
+      itemTotals[l.itemName].quantity += l.quantity;
+      itemTotals[l.itemName].value += l.estimatedValue;
+    });
+    const topItems = Object.values(itemTotals)
+      .sort((a, b) => b.quantity - a.quantity)
+      .slice(0, 5);
+
+    const rescuedQuantity = donations.reduce((sum, d) => sum + d.quantity, 0);
+    const denominator = rescuedQuantity + totalQuantity;
+    const diversionRate = denominator > 0 ? Math.round((rescuedQuantity / denominator) * 100) : 0;
+
+    res.json({
+      totalQuantity,
+      totalValue,
+      byReason,
+      topItems,
+      rescuedQuantity,
+      diversionRate,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.get("/wastage", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const logs = await WastageLog.find({ restaurant: restaurant._id }).sort({ date: -1 });
+    res.json(logs);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.post("/wastage", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const { itemName, category, quantity, unit, reason, estimatedValue, date, notes } = req.body;
+    if (!itemName || !quantity) {
+      return res.status(400).json({ message: "Item name and quantity are required" });
+    }
+
+    const log = new WastageLog({
+      restaurant: restaurant._id,
+      itemName,
+      category: category || "Main",
+      quantity,
+      unit: unit || "portions",
+      reason: reason || "unsold",
+      estimatedValue: estimatedValue || 0,
+      date: date || Date.now(),
+      notes: notes || "",
+    });
+    await log.save();
+    res.status(201).json(log);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.delete("/wastage/:id", auth, merchant, async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findOne({ owner: req.user.id });
+    if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
+
+    const log = await WastageLog.findOneAndDelete({ _id: req.params.id, restaurant: restaurant._id });
+    if (!log) return res.status(404).json({ message: "Wastage log not found" });
+    res.json({ message: "Wastage log deleted" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

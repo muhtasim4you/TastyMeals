@@ -770,6 +770,57 @@
   border-color: #3498db;
 }
 
+/* ===== BAR METER (analytics) ===== */
+.bar-meter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.bar-meter-row:last-child {
+  margin-bottom: 0;
+}
+
+.bar-meter-label {
+  width: 130px;
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.bar-meter-track {
+  flex: 1;
+  height: 14px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bar-meter-fill {
+  height: 100%;
+  border-radius: 0 8px 8px 0;
+  min-width: 4px;
+  transition: width 0.4s ease;
+}
+
+.bar-meter-value {
+  width: 100px;
+  text-align: right;
+  flex-shrink: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.analytics-empty {
+  color: #999;
+  font-size: 0.85rem;
+  padding: 10px 0;
+}
+
 /* ===== RESTAURANT CARDS ===== */
 .merchant-preview-card {
   max-width: 340px;

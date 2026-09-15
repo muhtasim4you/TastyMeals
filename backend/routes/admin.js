@@ -8,6 +8,7 @@ const Settings = require("../models/Settings");
 const Charity = require("../models/Charity");
 const Donation = require("../models/Donation");
 const Notification = require("../models/Notification");
+const WastageLog = require("../models/WastageLog");
 
 const router = express.Router();
 
@@ -330,6 +331,18 @@ router.delete("/notifications/:id", auth, admin, async (req, res) => {
   try {
     await Notification.findByIdAndDelete(req.params.id);
     res.json({ message: "Notification deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ===== FOOD WASTAGE OVERSIGHT (read-only) =====
+router.get("/wastage", auth, admin, async (req, res) => {
+  try {
+    const logs = await WastageLog.find()
+      .populate("restaurant", "name location")
+      .sort({ date: -1 });
+    res.json(logs);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

@@ -21,6 +21,7 @@ import MerchantLayout from "./pages/merchant/MerchantLayout";
 import MerchantDashboard from "./pages/merchant/MerchantDashboard";
 import MerchantMenu from "./pages/merchant/MerchantMenu";
 import MerchantDonations from "./pages/merchant/MerchantDonations";
+import MerchantWastage from "./pages/merchant/MerchantWastage";
 import Dashboard from "./pages/admin/Dashboard";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageRestaurants from "./pages/admin/ManageRestaurants";
@@ -29,6 +30,7 @@ import ManageOrders from "./pages/admin/ManageOrders";
 import ManageCharities from "./pages/admin/ManageCharities";
 import ManageDonations from "./pages/admin/ManageDonations";
 import ManageNotifications from "./pages/admin/ManageNotifications";
+import ManageWastage from "./pages/admin/ManageWastage";
 import ManageSettings from "./pages/admin/ManageSettings";
 
 const App = () => {
@@ -46,6 +48,7 @@ const App = () => {
           <Route path="charities" element={<ManageCharities />} />
           <Route path="donations" element={<ManageDonations />} />
           <Route path="notifications" element={<ManageNotifications />} />
+          <Route path="wastage" element={<ManageWastage />} />
           <Route path="settings" element={<ManageSettings />} />
         </Route>
 
@@ -55,6 +58,7 @@ const App = () => {
           <Route index element={<MerchantDashboard />} />
           <Route path="menu" element={<MerchantMenu />} />
           <Route path="donations" element={<MerchantDonations />} />
+          <Route path="wastage" element={<MerchantWastage />} />
         </Route>
 
         {/* User Routes — with Navbar/Footer */}
