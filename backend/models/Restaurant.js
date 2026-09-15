@@ -9,6 +9,10 @@ const menuItemSchema = new mongoose.Schema({
   rating: { type: Number, default: 0 },
   discountPercentage: { type: Number, default: 0 },
   expiryDate: { type: Date, default: null },
+  calories: { type: Number, default: 0 },
+  protein: { type: Number, default: 0 },
+  carbs: { type: Number, default: 0 },
+  fat: { type: Number, default: 0 },
 });
 
 const restaurantSchema = new mongoose.Schema(

@@ -92,7 +92,7 @@ router.post("/restaurant/menu", auth, merchant, async (req, res) => {
     const restaurant = await Restaurant.findOne({ owner: req.user.id });
     if (!restaurant) return res.status(404).json({ message: "No restaurant found for this account" });
 
-    const { name, description, price, image, category, rating, discountPercentage, expiryDate } = req.body;
+    const { name, description, price, image, category, rating, discountPercentage, expiryDate, calories, protein, carbs, fat } = req.body;
     restaurant.menu.push({
       name,
       description,
@@ -102,6 +102,10 @@ router.post("/restaurant/menu", auth, merchant, async (req, res) => {
       rating: rating || 0,
       discountPercentage: discountPercentage || 0,
       expiryDate: expiryDate || null,
+      calories: calories || 0,
+      protein: protein || 0,
+      carbs: carbs || 0,
+      fat: fat || 0,
     });
     await restaurant.save();
     res.json(restaurant);
@@ -118,7 +122,7 @@ router.put("/restaurant/menu/:itemId", auth, merchant, async (req, res) => {
     const item = restaurant.menu.id(req.params.itemId);
     if (!item) return res.status(404).json({ message: "Menu item not found" });
 
-    const { name, description, price, image, category, rating, discountPercentage, expiryDate } = req.body;
+    const { name, description, price, image, category, rating, discountPercentage, expiryDate, calories, protein, carbs, fat } = req.body;
     if (name !== undefined) item.name = name;
     if (description !== undefined) item.description = description;
     if (price !== undefined) item.price = price;
@@ -127,6 +131,10 @@ router.put("/restaurant/menu/:itemId", auth, merchant, async (req, res) => {
     if (rating !== undefined) item.rating = rating;
     if (discountPercentage !== undefined) item.discountPercentage = discountPercentage;
     if (expiryDate !== undefined) item.expiryDate = expiryDate || null;
+    if (calories !== undefined) item.calories = calories;
+    if (protein !== undefined) item.protein = protein;
+    if (carbs !== undefined) item.carbs = carbs;
+    if (fat !== undefined) item.fat = fat;
 
     await restaurant.save();
     res.json(restaurant);

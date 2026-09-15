@@ -44,6 +44,20 @@ const userSchema = new mongoose.Schema(
     dietary: {
       preference: { type: String, default: "none" },
       allergies: [{ type: String }],
+      age: { type: Number, default: null },
+      gender: { type: String, enum: ["male", "female"], default: "male" },
+      weightKg: { type: Number, default: null },
+      heightCm: { type: Number, default: null },
+      activityLevel: {
+        type: String,
+        enum: ["sedentary", "light", "moderate", "active", "very_active"],
+        default: "moderate",
+      },
+      goal: {
+        type: String,
+        enum: ["weight_loss", "maintenance", "muscle_gain"],
+        default: "maintenance",
+      },
     },
     rewardPoints: { type: Number, default: 0 },
   },

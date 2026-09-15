@@ -94,6 +94,17 @@
   color: #3498db !important;
 }
 
+.navbar-diet-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #27ae60 !important;
+}
+
+.navbar-diet-link:hover {
+  color: #219150 !important;
+}
+
 .navbar-jobs-link:hover {
   color: #2980b9 !important;
 }

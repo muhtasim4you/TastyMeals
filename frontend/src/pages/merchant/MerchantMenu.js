@@ -18,6 +18,7 @@ const MerchantMenu = () => {
   const [form, setForm] = useState({
     name: "", description: "", price: "", image: "", category: "Main", rating: "",
     discountPercentage: "", expiryDate: "",
+    calories: "", protein: "", carbs: "", fat: "",
   });
 
   const API = "http://localhost:5000/api/merchant/restaurant";
@@ -39,6 +40,7 @@ const MerchantMenu = () => {
     setForm({
       name: "", description: "", price: "", image: "", category: "Main", rating: "",
       discountPercentage: "", expiryDate: "",
+      calories: "", protein: "", carbs: "", fat: "",
     });
     setImageFile(null);
     setImagePreview("");
@@ -59,6 +61,8 @@ const MerchantMenu = () => {
       image: item.image, category: item.category, rating: item.rating,
       discountPercentage: item.discountPercentage || "",
       expiryDate: toDatetimeLocal(item.expiryDate),
+      calories: item.calories || "", protein: item.protein || "",
+      carbs: item.carbs || "", fat: item.fat || "",
     });
     setImageFile(null);
     setImagePreview(item.image || "");
@@ -102,6 +106,10 @@ const MerchantMenu = () => {
       rating: parseFloat(form.rating) || 0,
       discountPercentage: parseFloat(form.discountPercentage) || 0,
       expiryDate: form.expiryDate ? new Date(form.expiryDate).toISOString() : null,
+      calories: parseFloat(form.calories) || 0,
+      protein: parseFloat(form.protein) || 0,
+      carbs: parseFloat(form.carbs) || 0,
+      fat: parseFloat(form.fat) || 0,
     };
     try {
       if (editing) {
@@ -192,6 +200,26 @@ const MerchantMenu = () => {
                 <input type="datetime-local" value={form.expiryDate} onChange={(e) => setForm({ ...form, expiryDate: e.target.value })} />
               </div>
             </div>
+            <div className="admin-form-row">
+              <div className="admin-form-group">
+                <label>Calories (kcal)</label>
+                <input type="number" step="1" min="0" value={form.calories} onChange={(e) => setForm({ ...form, calories: e.target.value })} />
+              </div>
+              <div className="admin-form-group">
+                <label>Protein (g)</label>
+                <input type="number" step="1" min="0" value={form.protein} onChange={(e) => setForm({ ...form, protein: e.target.value })} />
+              </div>
+            </div>
+            <div className="admin-form-row">
+              <div className="admin-form-group">
+                <label>Carbs (g)</label>
+                <input type="number" step="1" min="0" value={form.carbs} onChange={(e) => setForm({ ...form, carbs: e.target.value })} />
+              </div>
+              <div className="admin-form-group">
+                <label>Fat (g)</label>
+                <input type="number" step="1" min="0" value={form.fat} onChange={(e) => setForm({ ...form, fat: e.target.value })} />
+              </div>
+            </div>
             <div className="admin-form-group">
               <label>Image</label>
               <div className="image-upload-area">
@@ -230,6 +258,7 @@ const MerchantMenu = () => {
               <th>Category</th>
               <th>Price</th>
               <th>Rating</th>
+              <th>Nutrition</th>
               <th>Deal</th>
               <th>Actions</th>
             </tr>
@@ -252,6 +281,13 @@ const MerchantMenu = () => {
                 <td><span className="cat-badge">{item.category}</span></td>
                 <td className="table-price">৳{item.price.toFixed(2)}</td>
                 <td><FaStar className="star-sm" /> {item.rating}</td>
+                <td>
+                  {item.calories > 0 ? (
+                    <span className="table-desc">{item.calories} kcal · P{item.protein} C{item.carbs} F{item.fat}</span>
+                  ) : (
+                    <span className="table-muted">-</span>
+                  )}
+                </td>
                 <td>
                   {item.discountPercentage > 0 && item.expiryDate ? (
                     <span className={`cat-badge ${new Date(item.expiryDate) > new Date() ? "deal-badge-active" : "deal-badge-expired"}`}>

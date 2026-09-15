@@ -14,6 +14,7 @@ import Rewards from "./pages/Rewards";
 import Jobs from "./pages/Jobs";
 import JobApply from "./pages/JobApply";
 import MyApplications from "./pages/MyApplications";
+import DietPlanner from "./pages/DietPlanner";
 import RestaurantDetail from "./pages/RestaurantDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -90,6 +91,7 @@ const App = () => {
                 <Route path="/jobs" element={<Jobs />} />
                 <Route path="/jobs/:id/apply" element={<JobApply />} />
                 <Route path="/my-applications" element={<MyApplications />} />
+                <Route path="/diet-plan" element={<DietPlanner />} />
                 <Route path="/restaurant/:id" element={<RestaurantDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />

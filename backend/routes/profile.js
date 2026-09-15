@@ -25,7 +25,14 @@ router.put("/", auth, async (req, res) => {
     if (phone !== undefined) updateFields.phone = phone;
     if (address) updateFields.address = address;
     if (payment) updateFields.payment = payment;
-    if (dietary) updateFields.dietary = dietary;
+    if (dietary) {
+      // Merge field-by-field so this doesn't wipe out diet-plan health
+      // metrics (age/weight/height/goal) that live in the same subdocument
+      // but aren't part of the Profile page's dietary form.
+      Object.keys(dietary).forEach((key) => {
+        updateFields[`dietary.${key}`] = dietary[key];
+      });
+    }
 
     const user = await User.findByIdAndUpdate(
       req.user.id,
