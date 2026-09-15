@@ -75,6 +75,23 @@
   color: #fff;
 }
 
+.profile-tabs li a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  width: 100%;
+}
+
+.profile-tabs-divider {
+  color: #aaa;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 18px 0 8px 15px;
+}
+
 .profile-content {
   flex: 1;
   background: #fff;

@@ -29,7 +29,7 @@ const Rewards = () => {
       <div className="rewards-how">
         <h3><FaFire /> How to Earn Points</h3>
         <p>
-          Every time you order a <Link to="/deals">discounted item nearing expiry</Link>, you help
+          Every time you order a <Link to="/offers">discounted item nearing expiry</Link>, you help
           rescue food that would otherwise go to waste — and earn <strong>10 points per unit</strong> ordered.
           Redeem 100 points for ৳50 off any future order at checkout.
         </p>

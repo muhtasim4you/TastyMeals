@@ -1,8 +1,43 @@
 .offers-page {
-  max-width: 950px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
   min-height: calc(100vh - 200px);
+}
+
+.offers-tab-bar {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.offers-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border: 2px solid #eee;
+  border-radius: 25px;
+  background: #fff;
+  color: #666;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.offers-tab-btn:hover {
+  border-color: #9b59b6;
+  color: #9b59b6;
+}
+
+.offers-tab-btn.active {
+  background: #9b59b6;
+  border-color: #9b59b6;
+  color: #fff;
 }
 
 .offers-header {

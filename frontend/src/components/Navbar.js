@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
 import { NotificationContext } from "../context/NotificationContext";
 import { RewardContext } from "../context/RewardContext";
-import { FaUtensils, FaSearch, FaShoppingCart, FaFire, FaBell, FaSeedling, FaBriefcase, FaAppleAlt, FaHeadset, FaTags } from "react-icons/fa";
+import { FaUtensils, FaSearch, FaShoppingCart, FaBell, FaSeedling } from "react-icons/fa";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -47,31 +47,10 @@ const Navbar = () => {
 
       <ul className="navbar-center">
         <li><Link to="/">Home</Link></li>
-        <li>
-          <Link to="/deals" className="navbar-deals-link">
-            <FaFire /> Deals
-          </Link>
-        </li>
-        <li>
-          <Link to="/jobs" className="navbar-jobs-link">
-            <FaBriefcase /> Careers
-          </Link>
-        </li>
-        <li>
-          <Link to="/offers" className="navbar-offers-link">
-            <FaTags /> Offers
-          </Link>
-        </li>
+        <li><Link to="/offers">Offers</Link></li>
         {user && (
           <>
             <li><Link to="/wishlist">Wishlist</Link></li>
-            <li><Link to="/orders">Orders</Link></li>
-            <li>
-              <Link to="/diet-plan" className="navbar-diet-link">
-                <FaAppleAlt /> Diet Plan
-              </Link>
-            </li>
-            <li><Link to="/my-applications">My Applications</Link></li>
             <li><Link to="/profile">Profile</Link></li>
           </>
         )}
@@ -82,11 +61,6 @@ const Navbar = () => {
             <li>
               <Link to="/rewards" className="rewards-pill">
                 <FaSeedling /> {balance}
-              </Link>
-            </li>
-            <li>
-              <Link to="/support" className="cart-link" title="Support">
-                <FaHeadset />
               </Link>
             </li>
             <li>

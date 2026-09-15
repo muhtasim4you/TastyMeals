@@ -76,50 +76,6 @@
   color: #e74c3c;
 }
 
-.navbar-deals-link {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #e67e22 !important;
-}
-
-.navbar-deals-link:hover {
-  color: #d35400 !important;
-}
-
-.navbar-jobs-link {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #3498db !important;
-}
-
-.navbar-diet-link {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #27ae60 !important;
-}
-
-.navbar-diet-link:hover {
-  color: #219150 !important;
-}
-
-.navbar-jobs-link:hover {
-  color: #2980b9 !important;
-}
-
-.navbar-offers-link {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #9b59b6 !important;
-}
-
-.navbar-offers-link:hover {
-  color: #8e44ad !important;
-}
-
 .navbar-right {
   display: flex;
   align-items: center;
@@ -134,6 +90,13 @@
 
 .navbar-right a:hover {
   color: #e74c3c;
+}
+
+.navbar-center a:focus-visible,
+.navbar-right a:focus-visible {
+  outline: 2px solid #e74c3c;
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .navbar-user {

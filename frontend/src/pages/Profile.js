@@ -1,9 +1,21 @@
 import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { FaUser, FaPhone, FaMapMarkerAlt, FaCreditCard, FaLeaf, FaTimes } from "react-icons/fa";
+import {
+  FaUser,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaCreditCard,
+  FaLeaf,
+  FaTimes,
+  FaBriefcase,
+  FaClipboardList,
+  FaAppleAlt,
+  FaFileAlt,
+  FaLock,
+} from "react-icons/fa";
 import "./Profile.css";
 
 const Profile = () => {
@@ -21,6 +33,12 @@ const Profile = () => {
   });
 
   const [allergyInput, setAllergyInput] = useState("");
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [changingPassword, setChangingPassword] = useState(false);
 
   const API = "http://localhost:5000/api/profile";
 
@@ -125,6 +143,37 @@ const Profile = () => {
     setAllergyInput("");
   };
 
+  const handleChangePassword = async () => {
+    const { currentPassword, newPassword, confirmPassword } = passwordForm;
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast.error("Please fill in all password fields");
+      return;
+    }
+    if (newPassword.length < 6) {
+      toast.error("New password must be at least 6 characters");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error("New password and confirmation do not match");
+      return;
+    }
+
+    setChangingPassword(true);
+    try {
+      await axios.put(
+        `${API}/password`,
+        { currentPassword, newPassword },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("Password updated successfully!");
+      setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to update password");
+    } finally {
+      setChangingPassword(false);
+    }
+  };
+
   return (
     <div className="profile-page">
       <div className="profile-container">
@@ -158,6 +207,28 @@ const Profile = () => {
               onClick={() => setActiveTab("dietary")}
             >
               <FaLeaf /> Dietary Preferences
+            </li>
+            <li
+              className={activeTab === "security" ? "active" : ""}
+              onClick={() => setActiveTab("security")}
+            >
+              <FaLock /> Change Password
+            </li>
+          </ul>
+
+          <p className="profile-tabs-divider">More</p>
+          <ul className="profile-tabs">
+            <li>
+              <Link to="/jobs"><FaBriefcase /> Careers</Link>
+            </li>
+            <li>
+              <Link to="/orders"><FaClipboardList /> Orders</Link>
+            </li>
+            <li>
+              <Link to="/diet-plan"><FaAppleAlt /> Diet Plan</Link>
+            </li>
+            <li>
+              <Link to="/my-applications"><FaFileAlt /> My Applications</Link>
             </li>
           </ul>
         </div>
@@ -346,9 +417,57 @@ const Profile = () => {
             </div>
           )}
 
-          <button className="save-btn" onClick={handleSave} disabled={loading}>
-            {loading ? "Saving..." : "Save Changes"}
-          </button>
+          {activeTab === "security" && (
+            <div className="profile-section">
+              <h2>Change Password</h2>
+              <div className="form-group">
+                <label>Current Password</label>
+                <input
+                  type="password"
+                  value={passwordForm.currentPassword}
+                  onChange={(e) =>
+                    setPasswordForm({ ...passwordForm, currentPassword: e.target.value })
+                  }
+                  placeholder="Enter current password"
+                />
+              </div>
+              <div className="form-group">
+                <label>New Password</label>
+                <input
+                  type="password"
+                  value={passwordForm.newPassword}
+                  onChange={(e) =>
+                    setPasswordForm({ ...passwordForm, newPassword: e.target.value })
+                  }
+                  placeholder="At least 6 characters"
+                />
+              </div>
+              <div className="form-group">
+                <label>Confirm New Password</label>
+                <input
+                  type="password"
+                  value={passwordForm.confirmPassword}
+                  onChange={(e) =>
+                    setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })
+                  }
+                  placeholder="Re-enter new password"
+                />
+              </div>
+              <button
+                className="save-btn"
+                onClick={handleChangePassword}
+                disabled={changingPassword}
+              >
+                {changingPassword ? "Updating..." : "Update Password"}
+              </button>
+            </div>
+          )}
+
+          {activeTab !== "security" && (
+            <button className="save-btn" onClick={handleSave} disabled={loading}>
+              {loading ? "Saving..." : "Save Changes"}
+            </button>
+          )}
         </div>
       </div>
     </div>

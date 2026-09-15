@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -8,7 +8,6 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Wishlist from "./pages/Wishlist";
 import SearchResults from "./pages/SearchResults";
-import Deals from "./pages/Deals";
 import Offers from "./pages/Offers";
 import Notifications from "./pages/Notifications";
 import Rewards from "./pages/Rewards";
@@ -96,7 +95,7 @@ const App = () => {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/search" element={<SearchResults />} />
-                <Route path="/deals" element={<Deals />} />
+                <Route path="/deals" element={<Navigate to="/offers" replace />} />
                 <Route path="/offers" element={<Offers />} />
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/rewards" element={<Rewards />} />
