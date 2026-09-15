@@ -3,13 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
 import { NotificationContext } from "../context/NotificationContext";
-import { FaUtensils, FaSearch, FaShoppingCart, FaFire, FaBell } from "react-icons/fa";
+import { RewardContext } from "../context/RewardContext";
+import { FaUtensils, FaSearch, FaShoppingCart, FaFire, FaBell, FaSeedling } from "react-icons/fa";
 import "./Navbar.css";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const { cartCount } = useContext(CartContext);
   const { unreadCount } = useContext(NotificationContext);
+  const { balance } = useContext(RewardContext);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -61,6 +63,11 @@ const Navbar = () => {
       <ul className="navbar-right">
         {user ? (
           <>
+            <li>
+              <Link to="/rewards" className="rewards-pill">
+                <FaSeedling /> {balance}
+              </Link>
+            </li>
             <li>
               <Link to="/notifications" className="cart-link">
                 <FaBell />

@@ -24,7 +24,7 @@ router.post("/add", auth, async (req, res) => {
       cart = new Cart({ user: req.user.id, items: [] });
     }
 
-    const { itemId, name, price, quantity, image, restaurant, restaurantId, specialInstructions, extras } = req.body;
+    const { itemId, name, price, quantity, image, restaurant, restaurantId, specialInstructions, extras, isRescuedDeal } = req.body;
 
     const existingIndex = cart.items.findIndex(
       (item) => item.itemId === itemId && item.specialInstructions === (specialInstructions || "") &&
@@ -44,6 +44,7 @@ router.post("/add", auth, async (req, res) => {
         restaurantId,
         specialInstructions: specialInstructions || "",
         extras: extras || [],
+        isRescuedDeal: !!isRescuedDeal,
       });
     }
 

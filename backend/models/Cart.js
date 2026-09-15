@@ -10,6 +10,7 @@ const cartItemSchema = new mongoose.Schema({
   restaurantId: { type: String, required: true },
   specialInstructions: { type: String, default: "" },
   extras: [{ type: String }],
+  isRescuedDeal: { type: Boolean, default: false },
 });
 
 const cartSchema = new mongoose.Schema(

@@ -10,6 +10,7 @@ const orderItemSchema = new mongoose.Schema({
   restaurantId: { type: String },
   specialInstructions: { type: String, default: "" },
   extras: [{ type: String }],
+  isRescuedDeal: { type: Boolean, default: false },
 });
 
 const orderSchema = new mongoose.Schema(
@@ -23,7 +24,10 @@ const orderSchema = new mongoose.Schema(
     subtotal: { type: Number, required: true },
     deliveryFee: { type: Number, default: 30 },
     tax: { type: Number, required: true },
+    pointsDiscount: { type: Number, default: 0 },
     total: { type: Number, required: true },
+    pointsEarned: { type: Number, default: 0 },
+    pointsRedeemed: { type: Number, default: 0 },
     payment: {
       method: { type: String, required: true, enum: ["bkash", "nagad", "bank"] },
       phoneNumber: { type: String, default: "" },

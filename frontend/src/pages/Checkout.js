@@ -3,14 +3,19 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
-import { FaCheckCircle, FaMobileAlt, FaUniversity } from "react-icons/fa";
+import { RewardContext } from "../context/RewardContext";
+import { FaCheckCircle, FaMobileAlt, FaUniversity, FaSeedling } from "react-icons/fa";
 import toast from "react-hot-toast";
 import "./Checkout.css";
+
+const POINT_VALUE = 0.5;
 
 const Checkout = () => {
   const { user, token } = useContext(AuthContext);
   const { cart, cartTotal, clearCart } = useContext(CartContext);
+  const { balance, fetchRewards } = useContext(RewardContext);
   const navigate = useNavigate();
+  const [usePoints, setUsePoints] = useState(false);
 
   const [step, setStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -37,7 +42,9 @@ const Checkout = () => {
   const [vatRate, setVatRate] = useState(5);
 
   const tax = cartTotal * (vatRate / 100);
-  const total = cartTotal + deliveryFee + tax;
+  const preDiscountTotal = cartTotal + deliveryFee + tax;
+  const pointsDiscount = usePoints ? Math.min(balance * POINT_VALUE, preDiscountTotal) : 0;
+  const total = preDiscountTotal - pointsDiscount;
 
   useEffect(() => {
     if (!user) {
@@ -134,13 +141,19 @@ const Checkout = () => {
           payment: paymentInfo,
           deliveryAddress: address,
           note,
+          redeemPoints: usePoints ? balance : 0,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setOrderId(res.data._id);
       setOrderPlaced(true);
+      clearCart();
       setStep(4);
       toast.success("Order placed successfully!");
+      if (res.data.pointsEarned > 0) {
+        toast.success(`You earned ${res.data.pointsEarned} reward points for rescuing food!`);
+      }
+      fetchRewards();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to place order");
     }
@@ -451,7 +464,10 @@ const Checkout = () => {
           <div className="summary-items">
             {cart.items.map((item) => (
               <div key={item._id} className="summary-item">
-                <span>{item.name} x{item.quantity}</span>
+                <span>
+                  {item.name} x{item.quantity}
+                  {item.isRescuedDeal && <span className="summary-rescue-tag"><FaSeedling /> Rescue</span>}
+                </span>
                 <span>৳{(item.price * item.quantity).toFixed(2)}</span>
               </div>
             ))}
@@ -469,6 +485,27 @@ const Checkout = () => {
             <span>VAT ({vatRate}%)</span>
             <span>৳{tax.toFixed(2)}</span>
           </div>
+
+          {balance > 0 && (
+            <div className="points-redeem-box">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={usePoints}
+                  onChange={(e) => setUsePoints(e.target.checked)}
+                />
+                Use my {balance} points (-৳{Math.min(balance * POINT_VALUE, preDiscountTotal).toFixed(2)})
+              </label>
+            </div>
+          )}
+
+          {pointsDiscount > 0 && (
+            <div className="summary-row summary-discount">
+              <span>Points Discount</span>
+              <span>-৳{pointsDiscount.toFixed(2)}</span>
+            </div>
+          )}
+
           <div className="summary-divider"></div>
           <div className="summary-row summary-total">
             <span>Total</span>

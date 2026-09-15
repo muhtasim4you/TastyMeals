@@ -45,6 +45,7 @@ const userSchema = new mongoose.Schema(
       preference: { type: String, default: "none" },
       allergies: [{ type: String }],
     },
+    rewardPoints: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

@@ -1,12 +1,18 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { FaStar, FaMapMarkerAlt, FaHeart, FaRegHeart, FaShoppingCart, FaTimes, FaPlus, FaMinus } from "react-icons/fa";
+import { FaStar, FaMapMarkerAlt, FaHeart, FaRegHeart, FaShoppingCart, FaTimes, FaPlus, FaMinus, FaLeaf } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import { WishlistContext } from "../context/WishlistContext";
 import { CartContext } from "../context/CartContext";
 import toast from "react-hot-toast";
 import "./RestaurantDetail.css";
+
+const isRescuedDeal = (item) =>
+  item.discountPercentage > 0 && item.expiryDate && new Date(item.expiryDate) > new Date();
+
+const effectivePrice = (item) =>
+  isRescuedDeal(item) ? item.price * (1 - item.discountPercentage / 100) : item.price;
 
 const extraOptions = [
   "Extra Cheese",
@@ -102,19 +108,25 @@ const RestaurantDetail = () => {
   };
 
   const handleAddToCart = async () => {
+    const rescued = isRescuedDeal(selectedItem);
     const success = await addToCart({
       itemId: selectedItem._id,
       name: selectedItem.name,
-      price: selectedItem.price,
+      price: effectivePrice(selectedItem),
       quantity,
       image: selectedItem.image,
       restaurant: restaurant.name,
       restaurantId: restaurant._id,
       specialInstructions,
       extras: selectedExtras,
+      isRescuedDeal: rescued,
     });
     if (success) {
-      toast.success(`${selectedItem.name} added to cart!`);
+      toast.success(
+        rescued
+          ? `${selectedItem.name} added to cart! You'll earn reward points for rescuing this item.`
+          : `${selectedItem.name} added to cart!`
+      );
       setShowModal(false);
     } else {
       toast.error("Failed to add to cart");
@@ -183,6 +195,11 @@ const RestaurantDetail = () => {
               {item.image && (
                 <img src={item.image} alt={item.name} className="menu-item-image" />
               )}
+              {isRescuedDeal(item) && (
+                <span className="menu-item-deal-badge">
+                  <FaLeaf /> -{item.discountPercentage}% Rescue Deal
+                </span>
+              )}
               <div className="menu-item-info">
                 <h4>{item.name}</h4>
                 <p className="menu-item-desc">{item.description}</p>
@@ -191,7 +208,14 @@ const RestaurantDetail = () => {
                   <span>{item.rating}</span>
                 </div>
                 <div className="menu-item-bottom">
-                  <span className="menu-item-price">৳{item.price.toFixed(2)}</span>
+                  {isRescuedDeal(item) ? (
+                    <span className="menu-item-price">
+                      <span className="menu-item-price-original">৳{item.price.toFixed(2)}</span>
+                      ৳{effectivePrice(item).toFixed(2)}
+                    </span>
+                  ) : (
+                    <span className="menu-item-price">৳{item.price.toFixed(2)}</span>
+                  )}
                   <div className="menu-item-actions">
                     <button
                       className={`menu-fav-btn ${isItemFav(item.name, restaurant.name) ? "fav-active" : ""}`}
@@ -227,7 +251,15 @@ const RestaurantDetail = () => {
               <div>
                 <h3>{selectedItem.name}</h3>
                 <p className="modal-desc">{selectedItem.description}</p>
-                <p className="modal-price">৳{selectedItem.price.toFixed(2)}</p>
+                {isRescuedDeal(selectedItem) ? (
+                  <p className="modal-price">
+                    <span className="menu-item-price-original">৳{selectedItem.price.toFixed(2)}</span>
+                    ৳{effectivePrice(selectedItem).toFixed(2)}
+                    <span className="modal-rescue-tag"><FaLeaf /> Rescue Deal</span>
+                  </p>
+                ) : (
+                  <p className="modal-price">৳{selectedItem.price.toFixed(2)}</p>
+                )}
               </div>
             </div>
 
@@ -271,7 +303,7 @@ const RestaurantDetail = () => {
 
             <div className="modal-footer">
               <div className="modal-total">
-                Total: <span>৳{(selectedItem.price * quantity).toFixed(2)}</span>
+                Total: <span>৳{(effectivePrice(selectedItem) * quantity).toFixed(2)}</span>
               </div>
               <button className="modal-add-btn" onClick={handleAddToCart}>
                 <FaShoppingCart /> Add to Cart

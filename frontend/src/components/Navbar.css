@@ -120,6 +120,23 @@
   background-color: #c0392b;
 }
 
+.rewards-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #eafaf1;
+  color: #27ae60;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.rewards-pill:hover {
+  background: #d5f5e3;
+}
+
 .cart-link {
   position: relative;
   font-size: 1.2rem;
