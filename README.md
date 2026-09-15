@@ -116,14 +116,6 @@ The frontend app will run on:
 
 - http://localhost:3000
 
-## Seeded Admin Account
-
-The app seeds a default admin user for local testing.
-
-- Email: admin@tastymeals.com
-- Password: admin123
-
-This is defined in `backend/seed.js`.
 
 ## Default Demo Behavior
 
