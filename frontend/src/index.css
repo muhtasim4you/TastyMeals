@@ -4,10 +4,19 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   background-color: #fafafa;
   color: #333;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
 }
 
 a {

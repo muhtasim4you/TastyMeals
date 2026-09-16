@@ -277,6 +277,7 @@
   left: 0;
   bottom: 0;
   z-index: 200;
+  overflow-y: auto;
 }
 
 .admin-sidebar-brand {
@@ -1143,6 +1144,25 @@
     display: none;
   }
 
+  .admin-sidebar-brand {
+    justify-content: center;
+    padding: 18px 10px;
+  }
+
+  .admin-nav-item {
+    justify-content: center;
+    padding: 13px 0;
+  }
+
+  .admin-sidebar-footer {
+    padding: 14px 10px;
+  }
+
+  .admin-logout-btn {
+    justify-content: center;
+    width: 100%;
+  }
+
   .admin-main {
     margin-left: 60px;
   }
@@ -1153,5 +1173,62 @@
 
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .admin-page {
+    padding: 18px;
+  }
+
+  .admin-page-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .admin-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bar-meter-row {
+    flex-wrap: wrap;
+  }
+
+  .bar-meter-label {
+    width: 100%;
+  }
+
+  .bar-meter-value {
+    width: auto;
+  }
+
+  .admin-login-left {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-sidebar {
+    width: 52px;
+  }
+
+  .admin-main {
+    margin-left: 52px;
+  }
+
+  .admin-page {
+    padding: 14px;
+  }
+
+  .admin-page-title {
+    font-size: 1.3rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 8px 10px;
+    font-size: 0.82rem;
+  }
+
+  .admin-login-right {
+    padding: 24px 16px;
   }
 }

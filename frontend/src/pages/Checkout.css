@@ -560,3 +560,31 @@
     text-align: center;
   }
 }
+
+@media (max-width: 480px) {
+  .checkout-page {
+    padding: 24px 14px;
+  }
+
+  .checkout-title {
+    font-size: 1.5rem;
+  }
+
+  .checkout-section {
+    padding: 20px 16px;
+  }
+
+  .step-line {
+    width: 24px;
+    margin: 0 4px;
+  }
+
+  .checkout-steps {
+    gap: 0;
+  }
+
+  .step {
+    font-size: 0.8rem;
+    gap: 5px;
+  }
+}

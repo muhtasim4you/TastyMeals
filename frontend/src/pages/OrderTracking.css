@@ -358,3 +358,13 @@
     text-align: center;
   }
 }
+
+@media (max-width: 480px) {
+  .tracking-page {
+    padding: 24px 14px;
+  }
+
+  .tracking-card {
+    padding: 22px 18px;
+  }
+}

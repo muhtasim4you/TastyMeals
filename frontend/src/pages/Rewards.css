@@ -146,3 +146,26 @@
 .reward-points.redeemed {
   color: #e74c3c;
 }
+
+@media (max-width: 480px) {
+  .rewards-page {
+    padding: 24px 16px;
+  }
+
+  .rewards-hero {
+    padding: 30px 18px;
+  }
+
+  .rewards-hero h1 {
+    font-size: 1.9rem;
+  }
+
+  .rewards-how {
+    padding: 18px 16px;
+  }
+
+  .reward-row {
+    padding: 14px;
+    gap: 10px;
+  }
+}

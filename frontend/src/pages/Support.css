@@ -376,3 +376,52 @@
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+@media (max-width: 768px) {
+  .support-page,
+  .thread-page {
+    padding: 24px 16px;
+  }
+
+  .support-ticket-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .thread-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .thread-message {
+    max-width: 88%;
+  }
+}
+
+@media (max-width: 480px) {
+  .support-channels {
+    grid-template-columns: 1fr;
+  }
+
+  .support-form-card {
+    padding: 18px 16px;
+  }
+
+  .support-form-actions {
+    flex-direction: column;
+  }
+
+  .support-submit-btn,
+  .support-cancel-btn {
+    width: 100%;
+  }
+
+  .thread-reply-form {
+    flex-direction: column;
+  }
+
+  .thread-send-btn {
+    padding: 12px;
+  }
+}

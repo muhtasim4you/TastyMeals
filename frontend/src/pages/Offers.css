@@ -148,3 +148,18 @@
   letter-spacing: 1px;
   font-size: 1rem;
 }
+
+@media (max-width: 480px) {
+  .offers-page {
+    padding: 24px 16px;
+  }
+
+  .offers-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .offers-tab-btn {
+    padding: 9px 16px;
+    font-size: 0.85rem;
+  }
+}

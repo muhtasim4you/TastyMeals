@@ -73,3 +73,19 @@
   color: #888;
   margin-bottom: 25px;
 }
+
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .job-apply-summary,
+  .job-apply-form {
+    padding: 18px;
+  }
+
+  .job-apply-success {
+    padding: 36px 20px;
+  }
+}

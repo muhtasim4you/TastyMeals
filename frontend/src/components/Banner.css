@@ -45,3 +45,36 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
+
+@media (max-width: 768px) {
+  .banner {
+    height: 340px;
+  }
+
+  .banner h1 {
+    font-size: 2.1rem;
+  }
+
+  .banner p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner {
+    height: 300px;
+  }
+
+  .banner-overlay {
+    padding: 15px;
+  }
+
+  .banner h1 {
+    font-size: 1.6rem;
+  }
+
+  .banner-btn {
+    padding: 10px 26px;
+    font-size: 0.9rem;
+  }
+}

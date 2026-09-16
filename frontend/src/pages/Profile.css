@@ -301,11 +301,40 @@
 }
 
 @media (max-width: 768px) {
+  .profile-page {
+    padding: 24px 14px;
+  }
+
   .profile-container {
     flex-direction: column;
+    gap: 16px;
   }
 
   .profile-sidebar {
     width: 100%;
+    padding: 20px 16px;
+  }
+
+  .profile-tabs {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .profile-tabs li {
+    flex-shrink: 0;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
+
+  .profile-tabs-divider {
+    display: none;
+  }
+
+  .profile-content {
+    padding: 22px 16px;
   }
 }

@@ -10,6 +10,29 @@
   z-index: 100;
 }
 
+.navbar-top {
+  display: contents;
+}
+
+.navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: #333;
+  cursor: pointer;
+  padding: 6px;
+  flex-shrink: 0;
+}
+
+.navbar-menu {
+  display: contents;
+}
+
+.navbar-link-label {
+  display: none;
+}
+
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -175,4 +198,122 @@
 .btn-logout:hover {
   background-color: #e74c3c;
   color: #fff;
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+  }
+
+  .navbar-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+  }
+
+  .navbar-brand {
+    order: 1;
+  }
+
+  .navbar-toggle {
+    display: inline-flex;
+    align-items: center;
+    order: 2;
+  }
+
+  .navbar-search {
+    order: 3;
+    flex: 1 1 100%;
+    width: auto;
+  }
+
+  .navbar-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .navbar-menu.open {
+    max-height: 700px;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .navbar-center,
+  .navbar-right {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 6px 20px 14px;
+  }
+
+  .navbar-center li,
+  .navbar-right li {
+    width: 100%;
+  }
+
+  .navbar-center a,
+  .navbar-right a {
+    display: block;
+    padding: 12px 4px;
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  .navbar-link-label {
+    display: inline;
+    margin-left: 10px;
+    font-weight: 500;
+  }
+
+  .cart-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 4px;
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  .cart-badge {
+    position: static;
+    margin-left: 8px;
+  }
+
+  .rewards-pill {
+    width: fit-content;
+    margin: 8px 0;
+  }
+
+  .navbar-user {
+    padding: 12px 4px;
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  .btn-logout,
+  .btn-register {
+    width: 100%;
+    text-align: center;
+    margin: 8px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-top {
+    padding: 12px 16px;
+  }
+
+  .navbar-brand {
+    font-size: 1.3rem;
+  }
+
+  .navbar-center,
+  .navbar-right {
+    padding: 6px 16px 14px;
+  }
 }

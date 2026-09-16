@@ -34,3 +34,12 @@
   font-weight: 600;
   white-space: nowrap;
 }
+
+@media (max-width: 480px) {
+  .application-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 16px;
+  }
+}
