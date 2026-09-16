@@ -5,6 +5,7 @@ import { FaTags, FaCopy, FaFire, FaStar, FaHeart, FaRegHeart, FaUtensils, FaCloc
 import toast from "react-hot-toast";
 import { AuthContext } from "../context/AuthContext";
 import { WishlistContext } from "../context/WishlistContext";
+import { API_BASE } from "../config";
 import "./Offers.css";
 import "./Deals.css";
 
@@ -38,7 +39,7 @@ const Offers = () => {
 
   const fetchDeals = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/restaurants/discounted");
+      const res = await axios.get(`${API_BASE}/api/restaurants/discounted`);
       setDeals(res.data);
     } catch (error) {
       toast.error("Failed to load deals");
@@ -49,7 +50,7 @@ const Offers = () => {
 
   const fetchPromos = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/promos");
+      const res = await axios.get(`${API_BASE}/api/promos`);
       setPromos(res.data);
     } catch (error) {
       toast.error("Failed to load offers");
@@ -65,6 +66,8 @@ const Offers = () => {
     }
     const isFav = isItemFav(item.name, item.restaurant);
     toggleItem({
+      itemId: item._id,
+      restaurantId: item.restaurantId,
       name: item.name,
       restaurant: item.restaurant,
       price: item.discountedPrice,

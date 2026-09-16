@@ -49,7 +49,7 @@ router.post("/item", auth, async (req, res) => {
       wishlist = new Wishlist({ user: req.user.id, restaurants: [], items: [] });
     }
 
-    const { name, restaurant, price, image } = req.body;
+    const { itemId, restaurantId, name, restaurant, price, image } = req.body;
     const exists = wishlist.items.find(
       (i) => i.name === name && i.restaurant === restaurant
     );
@@ -59,7 +59,7 @@ router.post("/item", auth, async (req, res) => {
         (i) => !(i.name === name && i.restaurant === restaurant)
       );
     } else {
-      wishlist.items.push({ name, restaurant, price, image });
+      wishlist.items.push({ itemId, restaurantId, name, restaurant, price, image });
     }
 
     await wishlist.save();

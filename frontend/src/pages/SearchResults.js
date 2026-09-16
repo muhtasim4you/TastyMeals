@@ -5,6 +5,7 @@ import { FaStar, FaMapMarkerAlt, FaHeart, FaRegHeart, FaSearch, FaUtensils } fro
 import { AuthContext } from "../context/AuthContext";
 import { WishlistContext } from "../context/WishlistContext";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./SearchResults.css";
 
 const SearchResults = () => {
@@ -16,7 +17,7 @@ const SearchResults = () => {
   const { user } = useContext(AuthContext);
   const { toggleRestaurant, isRestaurantFav, toggleItem, isItemFav } = useContext(WishlistContext);
 
-  const API = "http://localhost:5000/api/restaurants";
+  const API = `${API_BASE}/api/restaurants`;
 
   useEffect(() => {
     if (query) {
@@ -60,6 +61,8 @@ const SearchResults = () => {
     }
     const isFav = isItemFav(item.name, item.restaurant);
     toggleItem({
+      itemId: item._id,
+      restaurantId: item.restaurantId,
       name: item.name,
       restaurant: item.restaurant,
       price: item.price,

@@ -6,6 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 import { WishlistContext } from "../context/WishlistContext";
 import { CartContext } from "../context/CartContext";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./RestaurantDetail.css";
 
 const isRescuedDeal = (item) =>
@@ -41,7 +42,7 @@ const RestaurantDetail = () => {
   const { toggleRestaurant, isRestaurantFav, toggleItem, isItemFav } = useContext(WishlistContext);
   const { addToCart } = useContext(CartContext);
 
-  const API = "http://localhost:5000/api/restaurants";
+  const API = `${API_BASE}/api/restaurants`;
 
   useEffect(() => {
     fetchRestaurant();
@@ -61,7 +62,7 @@ const RestaurantDetail = () => {
 
   const fetchReviews = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/reviews/restaurant/${id}`);
+      const res = await axios.get(`${API_BASE}/api/reviews/restaurant/${id}`);
       setReviews(res.data);
     } catch (error) {
       // reviews are supplementary; fail silently
@@ -92,6 +93,8 @@ const RestaurantDetail = () => {
     }
     const isFav = isItemFav(item.name, restaurant.name);
     toggleItem({
+      itemId: item._id,
+      restaurantId: restaurant._id,
       name: item.name,
       restaurant: restaurant.name,
       price: item.price,

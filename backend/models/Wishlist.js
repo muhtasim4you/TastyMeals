@@ -19,6 +19,8 @@ const wishlistSchema = new mongoose.Schema(
     ],
     items: [
       {
+        itemId: { type: String },
+        restaurantId: { type: String },
         name: { type: String, required: true },
         restaurant: { type: String, required: true },
         price: { type: Number, required: true },

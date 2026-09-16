@@ -2,13 +2,15 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { WishlistContext } from "../context/WishlistContext";
-import { FaStar, FaMapMarkerAlt, FaTrash, FaHeart, FaUtensils } from "react-icons/fa";
+import { CartContext } from "../context/CartContext";
+import { FaStar, FaMapMarkerAlt, FaTrash, FaHeart, FaUtensils, FaBook, FaShoppingCart } from "react-icons/fa";
 import toast from "react-hot-toast";
 import "./Wishlist.css";
 
 const Wishlist = () => {
   const { user } = useContext(AuthContext);
   const { wishlist, removeRestaurant, removeItem } = useContext(WishlistContext);
+  const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("restaurants");
 
@@ -26,6 +28,34 @@ const Wishlist = () => {
   const handleRemoveItem = (itemId, name) => {
     removeItem(itemId);
     toast.success(`${name} removed from wishlist`);
+  };
+
+  const handleViewMenu = (restaurantId) => {
+    navigate(`/restaurant/${restaurantId}`);
+  };
+
+  const handleAddToCart = async (item) => {
+    if (!item.itemId || !item.restaurantId) {
+      toast.error("This item can't be added to cart. Re-add it from the restaurant page.");
+      return;
+    }
+    const success = await addToCart({
+      itemId: item.itemId,
+      name: item.name,
+      price: item.price,
+      quantity: 1,
+      image: item.image,
+      restaurant: item.restaurant,
+      restaurantId: item.restaurantId,
+      specialInstructions: "",
+      extras: [],
+      isRescuedDeal: false,
+    });
+    if (success) {
+      toast.success(`${item.name} added to cart!`);
+    } else {
+      toast.error("Failed to add to cart");
+    }
   };
 
   return (
@@ -78,12 +108,20 @@ const Wishlist = () => {
                           <FaMapMarkerAlt /> {restaurant.location}
                         </span>
                       </div>
-                      <button
-                        className="remove-btn"
-                        onClick={() => handleRemoveRestaurant(restaurant.restaurantId, restaurant.name)}
-                      >
-                        <FaTrash /> Remove
-                      </button>
+                      <div className="wishlist-card-actions">
+                        <button
+                          className="view-menu-btn"
+                          onClick={() => handleViewMenu(restaurant.restaurantId)}
+                        >
+                          <FaBook /> View Menu
+                        </button>
+                        <button
+                          className="remove-btn"
+                          onClick={() => handleRemoveRestaurant(restaurant.restaurantId, restaurant.name)}
+                        >
+                          <FaTrash /> Remove
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -112,12 +150,20 @@ const Wishlist = () => {
                       <p className="item-restaurant">{item.restaurant}</p>
                       <p className="item-price">৳{item.price.toFixed(2)}</p>
                     </div>
-                    <button
-                      className="remove-btn"
-                      onClick={() => handleRemoveItem(item._id, item.name)}
-                    >
-                      <FaTrash /> Remove
-                    </button>
+                    <div className="wishlist-item-actions">
+                      <button
+                        className="add-to-cart-btn"
+                        onClick={() => handleAddToCart(item)}
+                      >
+                        <FaShoppingCart /> Add to Cart
+                      </button>
+                      <button
+                        className="remove-btn"
+                        onClick={() => handleRemoveItem(item._id, item.name)}
+                      >
+                        <FaTrash /> Remove
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
