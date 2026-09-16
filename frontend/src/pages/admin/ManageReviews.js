@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaStar, FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const Stars = ({ value }) => (
@@ -23,7 +24,7 @@ const ManageReviews = () => {
 
   const fetchReviews = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/reviews", {
+      const res = await axios.get(`${API_BASE}/api/admin/reviews`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setReviews(res.data);
@@ -35,7 +36,7 @@ const ManageReviews = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Remove this review? The restaurant's rating will be recalculated.")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/admin/reviews/${id}`, {
+      await axios.delete(`${API_BASE}/api/admin/reviews/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setReviews(reviews.filter((r) => r._id !== id));

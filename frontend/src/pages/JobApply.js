@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { FaBriefcase, FaMapMarkerAlt, FaUtensils, FaMoneyBillWave, FaPaperPlane } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./Jobs.css";
 import "./Auth.css";
 import "./JobApply.css";
@@ -37,7 +38,7 @@ const JobApply = () => {
 
   const fetchJob = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/jobs/${id}`);
+      const res = await axios.get(`${API_BASE}/api/jobs/${id}`);
       setJob(res.data);
     } catch (error) {
       toast.error("Job posting not found");
@@ -50,7 +51,7 @@ const JobApply = () => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await axios.post(`http://localhost:5000/api/jobs/${id}/apply`, form, {
+      await axios.post(`${API_BASE}/api/jobs/${id}/apply`, form, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSubmitted(true);

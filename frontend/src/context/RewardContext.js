@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
+import { API_BASE } from "../config";
 
 export const RewardContext = createContext();
 
@@ -9,7 +10,7 @@ export const RewardProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
   const [transactions, setTransactions] = useState([]);
 
-  const API = "http://localhost:5000/api/rewards";
+  const API = `${API_BASE}/api/rewards`;
 
   useEffect(() => {
     if (user && token) {

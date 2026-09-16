@@ -6,6 +6,7 @@ import { CartContext } from "../context/CartContext";
 import { RewardContext } from "../context/RewardContext";
 import { FaCheckCircle, FaMobileAlt, FaUniversity, FaSeedling, FaTag, FaTimes } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./Checkout.css";
 
 const POINT_VALUE = 0.5;
@@ -61,7 +62,7 @@ const Checkout = () => {
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/profile", {
+      const res = await axios.get(`${API_BASE}/api/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.address) {
@@ -82,7 +83,7 @@ const Checkout = () => {
 
   const fetchSettings = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/settings");
+      const res = await axios.get(`${API_BASE}/api/settings`);
       setDeliveryFee(res.data.deliveryFee);
       setVatRate(res.data.vatRate);
     } catch (error) {
@@ -102,7 +103,7 @@ const Checkout = () => {
     setApplyingPromo(true);
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/promos/validate",
+        `${API_BASE}/api/promos/validate`,
         { code: promoInput.trim(), subtotal: cartTotal, deliveryFee, tax },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -164,7 +165,7 @@ const Checkout = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/orders",
+        `${API_BASE}/api/orders`,
         {
           payment: paymentInfo,
           deliveryAddress: address,

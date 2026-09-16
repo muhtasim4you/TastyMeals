@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaPhone, FaEnvelope, FaCloudUploadAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const ManageCharities = () => {
@@ -17,7 +18,7 @@ const ManageCharities = () => {
     name: "", description: "", location: "", contactPhone: "", contactEmail: "", image: "",
   });
 
-  const API = "http://localhost:5000/api/admin/charities";
+  const API = `${API_BASE}/api/admin/charities`;
 
   useEffect(() => {
     fetchCharities();
@@ -65,7 +66,7 @@ const ManageCharities = () => {
     try {
       const formData = new FormData();
       formData.append("image", imageFile);
-      const res = await axios.post("http://localhost:5000/api/upload", formData, {
+      const res = await axios.post(`${API_BASE}/api/upload`, formData, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
       });
       return res.data.imageUrl;

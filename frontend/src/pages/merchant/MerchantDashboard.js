@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaStar, FaMapMarkerAlt, FaCloudUploadAlt, FaClipboardList } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "../admin/Admin.css";
 
 const MerchantDashboard = () => {
@@ -15,7 +16,7 @@ const MerchantDashboard = () => {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({ name: "", cuisine: "", location: "", image: "", description: "" });
 
-  const API = "http://localhost:5000/api/merchant/restaurant";
+  const API = `${API_BASE}/api/merchant/restaurant`;
 
   useEffect(() => {
     fetchRestaurant();
@@ -49,7 +50,7 @@ const MerchantDashboard = () => {
     try {
       const formData = new FormData();
       formData.append("image", imageFile);
-      const res = await axios.post("http://localhost:5000/api/upload", formData, {
+      const res = await axios.post(`${API_BASE}/api/upload`, formData, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
       });
       return res.data.imageUrl;

@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
 import { FaShoppingCart, FaTrash, FaPlus, FaMinus, FaEdit, FaTimes } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./Cart.css";
 
 const extraOptions = [
@@ -37,7 +38,7 @@ const Cart = () => {
 
   const fetchSettings = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/settings");
+      const res = await axios.get(`${API_BASE}/api/settings`);
       setDeliveryFee(res.data.deliveryFee);
       setVatRate(res.data.vatRate);
     } catch (error) {

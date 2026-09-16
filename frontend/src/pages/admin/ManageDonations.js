@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const statusOptions = ["pending", "accepted", "picked_up", "cancelled"];
@@ -23,7 +24,7 @@ const ManageDonations = () => {
   const [donations, setDonations] = useState([]);
   const [filter, setFilter] = useState("all");
 
-  const API = "http://localhost:5000/api/admin/donations";
+  const API = `${API_BASE}/api/admin/donations`;
 
   useEffect(() => {
     fetchDonations();

@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaTruck, FaPercent, FaSave } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const ManageSettings = () => {
@@ -11,7 +12,7 @@ const ManageSettings = () => {
   const [vatRate, setVatRate] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const API = "http://localhost:5000/api/admin/settings";
+  const API = `${API_BASE}/api/admin/settings`;
 
   useEffect(() => {
     fetchSettings();

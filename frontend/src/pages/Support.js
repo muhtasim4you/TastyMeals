@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { FaHeadset, FaComments, FaEnvelope, FaPhoneAlt, FaPlus } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./Support.css";
 
 const SUPPORT_EMAIL = "support@tastymeals.com";
@@ -41,7 +42,7 @@ const Support = () => {
 
   const fetchTickets = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/support", {
+      const res = await axios.get(`${API_BASE}/api/support`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTickets(res.data);
@@ -59,7 +60,7 @@ const Support = () => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/support", form, {
+      const res = await axios.post(`${API_BASE}/api/support`, form, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTickets([res.data, ...tickets]);

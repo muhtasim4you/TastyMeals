@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const statusOptions = ["open", "in_progress", "resolved", "closed"];
@@ -30,7 +31,7 @@ const ManageSupport = () => {
 
   const fetchTickets = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/support", {
+      const res = await axios.get(`${API_BASE}/api/admin/support`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTickets(res.data);

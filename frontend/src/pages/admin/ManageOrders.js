@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const statusOptions = ["pending", "confirmed", "preparing", "on_the_way", "delivered", "cancelled"];
@@ -27,7 +28,7 @@ const ManageOrders = () => {
   const [orders, setOrders] = useState([]);
   const [filter, setFilter] = useState("all");
 
-  const API = "http://localhost:5000/api/admin/orders";
+  const API = `${API_BASE}/api/admin/orders`;
 
   useEffect(() => {
     fetchOrders();

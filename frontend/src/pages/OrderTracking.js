@@ -11,6 +11,7 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./OrderTracking.css";
 
 const statusSteps = [
@@ -27,7 +28,7 @@ const OrderTracking = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const API = "http://localhost:5000/api/orders";
+  const API = `${API_BASE}/api/orders`;
 
   useEffect(() => {
     if (!user) {

@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaArrowLeft, FaEnvelope, FaPhone, FaFileAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "../admin/Admin.css";
 
 const statusOptions = ["submitted", "reviewed", "shortlisted", "rejected", "hired"];
@@ -35,7 +36,7 @@ const MerchantApplications = () => {
 
   const fetchApplications = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/merchant/jobs/${id}/applications`, {
+      const res = await axios.get(`${API_BASE}/api/merchant/jobs/${id}/applications`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setJob(res.data.job);
@@ -48,7 +49,7 @@ const MerchantApplications = () => {
   const handleStatusChange = async (applicationId, status) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/merchant/applications/${applicationId}/status`,
+        `${API_BASE}/api/merchant/applications/${applicationId}/status`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );

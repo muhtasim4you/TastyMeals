@@ -3,13 +3,14 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const ManageUsers = () => {
   const { token } = useContext(AuthContext);
   const [users, setUsers] = useState([]);
 
-  const API = "http://localhost:5000/api/admin/users";
+  const API = `${API_BASE}/api/admin/users`;
 
   useEffect(() => {
     fetchUsers();

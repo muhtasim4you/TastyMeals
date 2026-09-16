@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { FaBriefcase, FaMapMarkerAlt, FaUtensils, FaMoneyBillWave } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./Jobs.css";
 
 const employmentLabels = {
@@ -22,7 +23,7 @@ const Jobs = () => {
 
   const fetchJobs = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/jobs");
+      const res = await axios.get(`${API_BASE}/api/jobs`);
       setJobs(res.data);
     } catch (error) {
       toast.error("Failed to load job postings");

@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaUsers, FaStore, FaClipboardList, FaDollarSign, FaClock } from "react-icons/fa";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const Dashboard = () => {
@@ -14,7 +15,7 @@ const Dashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/stats", {
+      const res = await axios.get(`${API_BASE}/api/admin/stats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setStats(res.data);

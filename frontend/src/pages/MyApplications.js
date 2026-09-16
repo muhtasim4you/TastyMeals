@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { FaBriefcase, FaUtensils } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./Jobs.css";
 import "./MyApplications.css";
 
@@ -39,7 +40,7 @@ const MyApplications = () => {
 
   const fetchApplications = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/jobs/my-applications", {
+      const res = await axios.get(`${API_BASE}/api/jobs/my-applications`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setApplications(res.data);

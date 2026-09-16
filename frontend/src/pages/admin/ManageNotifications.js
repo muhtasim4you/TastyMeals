@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaPlus, FaTrash, FaBell } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const typeLabels = {
@@ -19,7 +20,7 @@ const ManageNotifications = () => {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({ title: "", message: "", type: "initiative", image: "" });
 
-  const API = "http://localhost:5000/api/admin/notifications";
+  const API = `${API_BASE}/api/admin/notifications`;
 
   useEffect(() => {
     fetchNotifications();

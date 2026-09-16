@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaPlus, FaEdit, FaTrash, FaUsers } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "../admin/Admin.css";
 
 const employmentLabels = {
@@ -23,7 +24,7 @@ const MerchantJobs = () => {
     title: "", description: "", location: "", employmentType: "full_time", salaryRange: "",
   });
 
-  const API = "http://localhost:5000/api/merchant/jobs";
+  const API = `${API_BASE}/api/merchant/jobs`;
 
   useEffect(() => {
     fetchJobs();

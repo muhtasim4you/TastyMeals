@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaHandHoldingHeart, FaMapMarkerAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "../admin/Admin.css";
 
 const statusColors = {
@@ -26,7 +27,7 @@ const MerchantDonations = () => {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({ charityId: "", foodItem: "", quantity: "", unit: "portions", notes: "" });
 
-  const MERCHANT_API = "http://localhost:5000/api/merchant";
+  const MERCHANT_API = `${API_BASE}/api/merchant`;
 
   useEffect(() => {
     fetchCharities();
@@ -36,7 +37,7 @@ const MerchantDonations = () => {
 
   const fetchCharities = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/charities");
+      const res = await axios.get(`${API_BASE}/api/charities`);
       setCharities(res.data);
     } catch (error) {
       toast.error("Failed to load charity partners");

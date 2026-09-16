@@ -5,6 +5,7 @@ import { FaStar, FaMapMarkerAlt, FaHeart, FaRegHeart } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import { WishlistContext } from "../context/WishlistContext";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./TopRestaurants.css";
 
 const TopRestaurants = () => {
@@ -18,7 +19,7 @@ const TopRestaurants = () => {
 
   const fetchRestaurants = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/restaurants");
+      const res = await axios.get(`${API_BASE}/api/restaurants`);
       setRestaurants(res.data);
     } catch (error) {
       console.error("Failed to fetch restaurants");

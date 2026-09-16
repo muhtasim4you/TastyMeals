@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
+import { API_BASE } from "../config";
 
 export const NotificationContext = createContext();
 
@@ -8,7 +9,7 @@ export const NotificationProvider = ({ children }) => {
   const { user, token } = useContext(AuthContext);
   const [notifications, setNotifications] = useState([]);
 
-  const API = "http://localhost:5000/api/notifications";
+  const API = `${API_BASE}/api/notifications`;
 
   useEffect(() => {
     if (user && token) {

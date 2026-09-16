@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaTrash, FaUsers } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const employmentLabels = {
@@ -22,7 +23,7 @@ const ManageJobs = () => {
 
   const fetchJobs = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/jobs", {
+      const res = await axios.get(`${API_BASE}/api/admin/jobs`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setJobs(res.data);
@@ -34,7 +35,7 @@ const ManageJobs = () => {
   const handleDelete = async (id, title) => {
     if (!window.confirm(`Remove job posting "${title}"? This also removes its applications.`)) return;
     try {
-      await axios.delete(`http://localhost:5000/api/admin/jobs/${id}`, {
+      await axios.delete(`${API_BASE}/api/admin/jobs/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setJobs(jobs.filter((j) => j._id !== id));

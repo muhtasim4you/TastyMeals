@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaChartBar, FaDollarSign, FaHandHoldingHeart, FaRecycle, FaTrash, FaPlus } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "../admin/Admin.css";
 
 const REASON_LABELS = {
@@ -33,7 +34,7 @@ const MerchantWastage = () => {
     reason: "unsold", estimatedValue: "", date: "", notes: "",
   });
 
-  const API = "http://localhost:5000/api/merchant/wastage";
+  const API = `${API_BASE}/api/merchant/wastage`;
 
   useEffect(() => {
     fetchAnalytics();

@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaPlus, FaEdit, FaTrash, FaArrowLeft, FaStar, FaCloudUploadAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "../admin/Admin.css";
 
 const MerchantMenu = () => {
@@ -21,7 +22,7 @@ const MerchantMenu = () => {
     calories: "", protein: "", carbs: "", fat: "",
   });
 
-  const API = "http://localhost:5000/api/merchant/restaurant";
+  const API = `${API_BASE}/api/merchant/restaurant`;
 
   useEffect(() => {
     fetchRestaurant();
@@ -84,7 +85,7 @@ const MerchantMenu = () => {
     try {
       const formData = new FormData();
       formData.append("image", imageFile);
-      const res = await axios.post("http://localhost:5000/api/upload", formData, {
+      const res = await axios.post(`${API_BASE}/api/upload`, formData, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
       });
       return res.data.imageUrl;

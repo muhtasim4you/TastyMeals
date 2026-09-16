@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaPlus, FaEdit, FaTrash, FaArrowLeft, FaStar, FaCloudUploadAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const ManageMenu = () => {
@@ -22,7 +23,7 @@ const ManageMenu = () => {
     calories: "", protein: "", carbs: "", fat: "",
   });
 
-  const API = `http://localhost:5000/api/admin/restaurants/${id}`;
+  const API = `${API_BASE}/api/admin/restaurants/${id}`;
 
   useEffect(() => {
     fetchRestaurant();
@@ -30,7 +31,7 @@ const ManageMenu = () => {
 
   const fetchRestaurant = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/restaurants/${id}`);
+      const res = await axios.get(`${API_BASE}/api/restaurants/${id}`);
       setRestaurant(res.data);
     } catch (error) {
       toast.error("Failed to load restaurant");
@@ -85,7 +86,7 @@ const ManageMenu = () => {
     try {
       const formData = new FormData();
       formData.append("image", imageFile);
-      const res = await axios.post("http://localhost:5000/api/upload", formData, {
+      const res = await axios.post(`${API_BASE}/api/upload`, formData, {
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
       });
       return res.data.imageUrl;

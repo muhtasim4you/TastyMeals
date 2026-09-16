@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
+import { API_BASE } from "../config";
 
 export const CartContext = createContext();
 
@@ -9,7 +10,7 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({ items: [] });
   const [cartLoaded, setCartLoaded] = useState(false);
 
-  const API = "http://localhost:5000/api/cart";
+  const API = `${API_BASE}/api/cart`;
 
   useEffect(() => {
     if (user && token) {

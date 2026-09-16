@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { FaHistory, FaChevronDown, FaChevronUp, FaBoxOpen, FaMobileAlt, FaUniversity, FaMapMarkerAlt, FaStar, FaTimes, FaCheckCircle } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./OrderHistory.css";
 
 const StarInput = ({ value, onChange }) => (
@@ -47,7 +48,7 @@ const OrderHistory = () => {
   const [reviewForm, setReviewForm] = useState({ restaurantRating: 0, restaurantComment: "", deliveryRating: 0, deliveryComment: "" });
   const [submittingReview, setSubmittingReview] = useState(false);
 
-  const API = "http://localhost:5000/api/orders";
+  const API = `${API_BASE}/api/orders`;
 
   useEffect(() => {
     if (!user) {
@@ -60,7 +61,7 @@ const OrderHistory = () => {
 
   const fetchMyReviews = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/reviews/my", {
+      const res = await axios.get(`${API_BASE}/api/reviews/my`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setReviewedOrderIds(new Set(res.data.map((r) => r.order)));
@@ -82,7 +83,7 @@ const OrderHistory = () => {
     setSubmittingReview(true);
     try {
       await axios.post(
-        "http://localhost:5000/api/reviews",
+        `${API_BASE}/api/reviews`,
         { orderId: reviewingOrder._id, ...reviewForm },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { FaArrowLeft } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./Support.css";
 
 const statusLabels = {
@@ -38,7 +39,7 @@ const SupportTicketPage = () => {
 
   const fetchTicket = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/support/${id}`, {
+      const res = await axios.get(`${API_BASE}/api/support/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTicket(res.data);
@@ -53,7 +54,7 @@ const SupportTicketPage = () => {
     setSending(true);
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/support/${id}/messages`,
+        `${API_BASE}/api/support/${id}/messages`,
         { message: reply },
         { headers: { Authorization: `Bearer ${token}` } }
       );

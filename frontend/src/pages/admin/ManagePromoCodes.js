@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const emptyForm = {
@@ -19,7 +20,7 @@ const ManagePromoCodes = () => {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState(emptyForm);
 
-  const API = "http://localhost:5000/api/admin/promos";
+  const API = `${API_BASE}/api/admin/promos`;
 
   useEffect(() => {
     fetchPromos();

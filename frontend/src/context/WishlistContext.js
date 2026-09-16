@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
+import { API_BASE } from "../config";
 
 export const WishlistContext = createContext();
 
@@ -8,7 +9,7 @@ export const WishlistProvider = ({ children }) => {
   const { user, token } = useContext(AuthContext);
   const [wishlist, setWishlist] = useState({ restaurants: [], items: [] });
 
-  const API = "http://localhost:5000/api/wishlist";
+  const API = `${API_BASE}/api/wishlist`;
 
   useEffect(() => {
     if (user && token) {

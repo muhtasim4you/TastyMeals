@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FaArrowLeft } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../../config";
 import "./Admin.css";
 
 const statusOptions = ["open", "in_progress", "resolved", "closed"];
@@ -34,7 +35,7 @@ const AdminSupportTicket = () => {
 
   const fetchTicket = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/admin/support/${id}`, {
+      const res = await axios.get(`${API_BASE}/api/admin/support/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTicket(res.data);
@@ -49,7 +50,7 @@ const AdminSupportTicket = () => {
     setSending(true);
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/admin/support/${id}/messages`,
+        `${API_BASE}/api/admin/support/${id}/messages`,
         { message: reply },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -65,7 +66,7 @@ const AdminSupportTicket = () => {
   const handleStatusChange = async (status) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/admin/support/${id}/status`,
+        `${API_BASE}/api/admin/support/${id}/status`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );

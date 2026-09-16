@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { API_BASE } from "../config";
 
 export const AuthContext = createContext();
 
@@ -11,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   });
   const [loading, setLoading] = useState(false);
 
-  const API = "http://localhost:5000/api/auth";
+  const API = `${API_BASE}/api/auth`;
 
   const register = async (name, email, password) => {
     setLoading(true);
@@ -32,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   const registerMerchant = async (payload) => {
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/merchant/register", payload);
+      const res = await axios.post(`${API_BASE}/api/merchant/register`, payload);
       setToken(res.data.token);
       setUser(res.data.user);
       localStorage.setItem("token", res.data.token);

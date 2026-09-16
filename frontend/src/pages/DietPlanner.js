@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { FaAppleAlt, FaFire, FaDrumstickBite, FaBreadSlice, FaTint, FaUtensils, FaHistory } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import "./DietPlanner.css";
 
 const dietaryOptions = ["none", "vegetarian", "vegan", "pescatarian", "keto", "halal", "kosher", "gluten-free"];
@@ -52,7 +53,7 @@ const DietPlanner = () => {
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/profile", {
+      const res = await axios.get(`${API_BASE}/api/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const d = res.data.dietary || {};
@@ -73,7 +74,7 @@ const DietPlanner = () => {
 
   const fetchHistory = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/dietplan/history", {
+      const res = await axios.get(`${API_BASE}/api/dietplan/history`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setHistory(res.data);
@@ -87,7 +88,7 @@ const DietPlanner = () => {
     setGenerating(true);
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/dietplan/generate",
+        `${API_BASE}/api/dietplan/generate`,
         { ...form, allergies },
         { headers: { Authorization: `Bearer ${token}` } }
       );

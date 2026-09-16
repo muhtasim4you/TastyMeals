@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { API_BASE } from "../config";
 import {
   FaUser,
   FaPhone,
@@ -40,7 +41,7 @@ const Profile = () => {
   });
   const [changingPassword, setChangingPassword] = useState(false);
 
-  const API = "http://localhost:5000/api/profile";
+  const API = `${API_BASE}/api/profile`;
 
   const dietaryOptions = [
     "none",
